@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AdSpace - Billboard Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-surface": "#191b23",
+                        "surface-container-low": "#f3f3fe",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c3c6d7",
+                        "surface": "#faf8ff",
+                        "on-primary-container": "#eeefff",
+                        "primary-container": "#2563eb",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-secondary-fixed": "#002113",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#6cf8bb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#00714d",
+                        "on-primary-fixed": "#00174b",
+                        "secondary": "#006c49",
+                        "on-error": "#ffffff",
+                        "primary": "#004ac6",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-high": "#e7e7f3",
+                        "surface-bright": "#faf8ff",
+                        "surface-dim": "#d9d9e5",
+                        "secondary-fixed": "#6ffbbe",
+                        "on-surface-variant": "#434655",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "outline": "#737686",
+                        "inverse-surface": "#2e3039",
+                        "surface-tint": "#0053db",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container-highest": "#e1e2ed",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary": "#943700",
+                        "tertiary-container": "#bc4800",
+                        "background": "#faf8ff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191b23",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container": "#ededf9",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface-variant": "#e1e2ed"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        base: "8px",
+                        gutter: "24px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "container-max": "1440px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Outfit"],
+                        "label-caps": ["Inter"],
+                        "headline-md": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Outfit"],
+                        "body-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background antialiased font-body-md text-body-md pb-[100px] pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface/60 backdrop-blur-3xl border-b border-white/40 shadow-sm shadow-primary/5">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">AdSpace</h1>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 duration-200">
+<span class="material-symbols-outlined">share</span>
+</button>
+</header>
+<!-- Hero Image -->
+<div class="w-full aspect-[4/3] bg-surface-container relative overflow-hidden">
+<img alt="Billboard" class="w-full h-full object-cover" data-alt="A large, modern digital billboard displaying a bright advertisement, situated beside a bustling city road during daytime. The scene is bathed in natural sunlight, casting soft shadows. The overall aesthetic is clean, professional, and high-tech, aligning with a sleek, premium light-mode design featuring royal blue and emerald green accents. The composition focuses on the billboard's visibility to passing traffic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNWAME5GPtD-SfjXCxygXZ7mcIn2GsssSOq35x_nrSs6CVRC9VECcZax9MqkywnXXqOkbwqbfxxgLNKdDJRgNdDaaMt10RpZwkbPeCXM2ohCQ8OSkkrEBDNedPx3EkjCTS98TG509U-n_LT1vDDjbNnVpA8q42vR16V8IL1m2sEO32dJ0ZqIAcQd6uv7lavTMfX_quw8cwnZt9exYd1JYyEqn7tqz_lYM3YFmK_jTgNxmiGNd3Olv_aEEsLLkHdcg1Pz2hLL_2kg"/>
+<!-- Glassmorphism Floating Badge -->
+<div class="absolute bottom-4 left-4 right-4 bg-white/60 backdrop-blur-2xl border border-white/40 p-4 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.08)]">
+<div class="flex justify-between items-end mb-3">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-1">Khandagiri Main Road Hoarding</h2>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Khandagiri, Bhubaneswar
+                    </p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center gap-1 bg-warning/10 text-warning px-2 py-0.5 rounded text-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">star</span> 9.2/10
+                        </div>
+</div>
+</div>
+<div class="pt-3 border-t border-outline-variant/30 flex justify-between items-center">
+<div class="text-left">
+<p class="font-headline-md text-headline-md text-primary font-bold leading-tight">₹850</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">/ day</p>
+</div>
+<div class="text-left border-l border-outline-variant/30 pl-4">
+<p class="font-body-md text-body-md text-on-surface font-semibold leading-tight">₹5,400</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">/ week</p>
+</div>
+<div class="text-right border-l border-outline-variant/30 pl-4">
+<p class="font-body-md text-body-md text-on-surface font-semibold leading-tight">₹22,500</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">/ month</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Container -->
+<main class="px-margin-mobile py-8 space-y-10">
+<!-- Status & Actions -->
+<div class="flex items-center justify-between">
+<div class="bg-secondary/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-caps text-label-caps text-secondary">Available Now</span>
+</div>
+</div>
+<!-- Horizontal Scrollable Gallery -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Gallery &amp; Location</h3>
+<div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar -mx-margin-mobile px-margin-mobile">
+<div class="flex-shrink-0 w-48 aspect-video rounded-xl overflow-hidden bg-surface-container border border-outline-variant/30">
+<img alt="View 1" class="w-full h-full object-cover" data-alt="A daytime perspective view of the modern digital billboard from the road level, showing clear visibility for passing cars. Bright, natural lighting, sleek architectural lines, and a professional, clean aesthetic suitable for a premium light-theme UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf9HRZdQoAO_QtToCedJtYfulsHDcTQ-TFw3vH8xcMjkLx7dYR_moUGP0HaTOPq6fBHTzBAGcE-n7jWub-_fM8CiTjV4uPiGte2PpXpRFSFlMPx7vEe_x_puT6625tdGVUTKEgkidpY0Op1BXUYXVNYYmPTjPl712VJHBbzbPR6n-wry6LTrcaPXKfnpJswEd6w5drN2x1NK1DuHadH-scs5ILNOV1Yp5_MGk1fiMBlXUAYl7SXxofE7hTjfNivqc3JE3L5mPkTA"/>
+</div>
+<div class="flex-shrink-0 w-48 aspect-video rounded-xl overflow-hidden bg-surface-container border border-outline-variant/30">
+<img alt="View 2" class="w-full h-full object-cover" data-alt="An evening shot of the digital billboard, brilliantly illuminated against the twilight sky. The vibrant screen contrasts with the deepening blue hour, emphasizing its high impact. The image reflects a sleek, premium design language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCramPN3lNWcxhjVi5YRtFHUN3YMJozWdbORJCngmqgd85rWvSqd8YoxpVCVWVqM-E-x9Be9rGyhwHRF5VAlZQSf6kBhzTdQDjepmL8LIMGIhnRufLr1uFQXKcOa0HBIzkJpBXIRw5A_OslyLNkU-MRAToxtWMOocqYQhjgjCF9P5IvlpQMH5Zxvu7LWi3dmk68DdrEo9bbepgCGtyoYTR5hmsOA2mMHkCwR4fDLXIgjIcG_qPztfN4LKM14c1KTh4oMzNh9s4K8Q"/>
+</div>
+<div class="flex-shrink-0 w-48 aspect-video rounded-xl overflow-hidden bg-surface-container border border-outline-variant/30 relative">
+<img alt="Map" class="w-full h-full object-cover opacity-80" data-location="Bhubaneswar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_Q86zKYcENKbVtfYfULAGMBFqXLHD_y8YJPALV5_vph7xvYpIxrJROoEbfXYK5HWu9NNl3dKkT3u59NpgwLYntvP7jNJRZNJbNuTGgEeV4gXenXrhWSZ2fVQVlWZWWS43OLyMrXn2gFZOGR1WYO9OIOliB0NmG5eRSZbetMXYzGehKZoPVJTZq8RDzxPRhT0HLinZSmtRMqZ2nSXrCCKty6-wUf2_XQI9MHB3zGVlP_Ndee4Mv6Zqmuj_I9nDV57_YIeSEi1jIQ"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-white text-[16px]">pin_drop</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Specifications -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Specifications</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary mb-2">aspect_ratio</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">SIZE</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">20ft x 10ft</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary mb-2">crop_portrait</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">ORIENTATION</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Landscape</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary mb-2">lightbulb</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">ILLUMINATION</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Front-Lit LED</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<span class="material-symbols-outlined text-primary mb-2">category</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">TYPE</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Static Flex</p>
+</div>
+</div>
+</section>
+<!-- Audience Demographics -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Audience Demographics</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">group</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant">PRIMARY AGE</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">25-40 years</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">wc</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant">GENDER SPLIT</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">55% M / 45% F</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20 col-span-2">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">work</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant">PRIMARY OCCUPATIONS</p>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Professionals &amp; Students</p>
+</div>
+</div>
+</section>
+<!-- Nearby Points of Interest -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Nearby POIs</h3>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 bg-surface-container-low p-3 rounded-lg border border-outline-variant/20">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">business</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">500m from Global Tech Park</p>
+</li>
+<li class="flex items-center gap-3 bg-surface-container-low p-3 rounded-lg border border-outline-variant/20">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">local_mall</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Adjacent to City Mall</p>
+</li>
+<li class="flex items-center gap-3 bg-surface-container-low p-3 rounded-lg border border-outline-variant/20">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">train</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">200m from Central Metro</p>
+</li>
+</ul>
+</section>
+<!-- Location Insights -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Location Insights</h3>
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-full font-body-md text-body-md">High Traffic Area</span>
+<span class="bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-full font-body-md text-body-md">IT Corridor</span>
+<span class="bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-full font-body-md text-body-md">Signal Facing</span>
+</div>
+</section>
+<!-- Traffic Heatmap -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Traffic Heatmap</h3>
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container border border-outline-variant/20 mb-4">
+<img alt="Map background" class="w-full h-full object-cover opacity-50 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_Q86zKYcENKbVtfYfULAGMBFqXLHD_y8YJPALV5_vph7xvYpIxrJROoEbfXYK5HWu9NNl3dKkT3u59NpgwLYntvP7jNJRZNJbNuTGgEeV4gXenXrhWSZ2fVQVlWZWWS43OLyMrXn2gFZOGR1WYO9OIOliB0NmG5eRSZbetMXYzGehKZoPVJTZq8RDzxPRhT0HLinZSmtRMqZ2nSXrCCKty6-wUf2_XQI9MHB3zGVlP_Ndee4Mv6Zqmuj_I9nDV57_YIeSEi1jIQ"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="absolute w-24 h-24 bg-error/30 rounded-full blur-2xl"></div>
+<div class="absolute w-16 h-16 bg-error/50 rounded-full blur-xl"></div>
+<div class="absolute w-8 h-8 bg-error/70 rounded-full blur-md"></div>
+<div class="absolute w-3 h-3 rounded-full bg-primary border-2 border-white shadow-md"></div>
+</div>
+</div>
+<div class="flex items-center justify-between mb-4">
+<p class="font-label-caps text-label-caps text-on-surface-variant">INTENSITY</p>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-semibold text-on-surface-variant uppercase">Low</span>
+<div class="w-20 h-2 rounded-full bg-gradient-to-r from-primary/20 via-tertiary to-error"></div>
+<span class="text-[10px] font-semibold text-on-surface-variant uppercase">High</span>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-tertiary/10 p-3 rounded-lg text-tertiary">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<p class="font-body-md text-sm font-medium text-on-surface"><strong>Peak traffic:</strong> 8AM-11AM &amp; 5PM-8PM</p>
+</div>
+</div>
+</section>
+<!-- Performance Analytics -->
+<section class="mb-8">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Estimated Performance</h3>
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/20">
+<div class="flex items-end justify-between mb-6">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">DAILY IMPRESSIONS</p>
+<p class="font-display-lg text-display-lg text-primary">~45k</p>
+</div>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<!-- Simple Bar Chart Representation -->
+<div class="flex items-end justify-between h-24 gap-2">
+<div class="w-full bg-primary/20 rounded-t-sm h-[40%]"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[50%]"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[45%]"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[70%]"></div>
+<div class="w-full bg-primary/40 rounded-t-sm h-[85%] relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-primary">FRI</div>
+</div>
+<div class="w-full bg-primary/60 rounded-t-sm h-[100%] relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 font-label-caps text-label-caps text-primary">SAT</div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[30%]"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button Panel -->
+<div class="fixed bottom-24 left-0 w-full px-margin-mobile z-40">
+<button class="w-full bg-primary text-on-primary font-headline-md text-headline-md py-4 rounded-full shadow-[0_8px_30px_rgb(0,74,198,0.2)] active:scale-95 transition-transform duration-200">
+            Confirm Booking
+        </button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile pb-safe pt-2 h-20 bg-surface/60 backdrop-blur-3xl border-t border-white/40 shadow-[0_-4px_20px_0_rgba(0,74,198,0.05)] md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-caps text-label-caps mt-1">Marketplace</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary bg-primary/10 rounded-full px-4 py-1 active:scale-90 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-label-caps text-label-caps mt-1 font-bold">Bookings</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps mt-1">Analytics</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 duration-150">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

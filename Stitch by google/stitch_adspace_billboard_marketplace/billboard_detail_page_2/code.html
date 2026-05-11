@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Billboard Details - AdSpace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#360f00",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c6d7",
+                    "on-error": "#ffffff",
+                    "primary-container": "#2563eb",
+                    "surface-container-low": "#f3f3fe",
+                    "primary-fixed": "#dbe1ff",
+                    "inverse-on-surface": "#f0f0fb",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#eeefff",
+                    "secondary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#002113",
+                    "inverse-surface": "#2e3039",
+                    "surface-variant": "#e1e2ed",
+                    "surface-bright": "#faf8ff",
+                    "on-background": "#191b23",
+                    "on-secondary-fixed-variant": "#005236",
+                    "primary": "#004ac6",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#0053db",
+                    "on-surface-variant": "#434655",
+                    "on-primary": "#ffffff",
+                    "tertiary-container": "#bc4800",
+                    "surface-container-high": "#e7e7f3",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-dim": "#d9d9e5",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "background": "#faf8ff",
+                    "on-secondary-container": "#00714d",
+                    "outline": "#737686",
+                    "secondary-container": "#6cf8bb",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "inverse-primary": "#b4c5ff",
+                    "on-tertiary-container": "#ffede6",
+                    "on-surface": "#191b23",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#4edea3",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "secondary": "#006c49",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "tertiary": "#943700",
+                    "surface-container-highest": "#e1e2ed",
+                    "surface-container": "#ededf9",
+                    "on-primary-fixed": "#00174b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "container-max": "1440px",
+                    "base": "8px",
+                    "margin-mobile": "20px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Outfit"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Outfit"],
+                    "body-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "headline-md": ["Outfit"],
+                    "headline-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 30px 60px -15px rgba(0, 74, 198, 0.05);
+        }
+        .ambient-shadow {
+            box-shadow: 0 40px 80px -20px rgba(0, 74, 198, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md">
+<!-- TopNavBar -->
+<nav class="sticky top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-4 backdrop-blur-md bg-surface/60 border-b border-white/40 shadow-sm shadow-blue-900/5">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-headline-md font-bold text-primary">AdSpace</span>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md text-body-md" href="#">Marketplace</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Analytics</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Campaigns</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-primary/5 transition-all duration-300 rounded-full scale-95 active:scale-90 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-primary/5 transition-all duration-300 rounded-full scale-95 active:scale-90 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+<button class="hidden md:flex items-center justify-center px-6 py-2 bg-primary text-on-primary rounded-full font-body-md text-body-md font-semibold hover:bg-primary-fixed-variant transition-colors">Vendor Portal</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-[80px] grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Visuals & Context -->
+<div class="lg:col-span-8 flex flex-col gap-[40px]">
+<!-- Hero Gallery -->
+<section class="flex flex-col gap-base">
+<div class="w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden bg-surface-container relative glass-panel">
+<img alt="Main view of Khandagiri Main Road Hoarding" class="w-full h-full object-cover" data-alt="A high-resolution photograph of a massive outdoor billboard positioned over a busy, modern city highway during a clear day. The billboard displays a vibrant ad, framed against a bright blue sky with fluffy white clouds. The aesthetic is sleek, light, and professional, perfectly aligning with a premium glassmorphic UI style. Subtle flares from the sun add a sense of dynamic energy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2A2NYNfyzw7hF1OH49hl22P1e9Y2dHqAM-po6C0sc3VfTU0f1r1vINyvv6vsVODGdwXyI8hlAybOPqbi27jcMpl2fHbZb3Pga-y0mtTr2c5wZ5xO_LUdBQHP1Mrhk99B5x_CZqHRPnQA4Y1kunZmBsou6XKywMF41CN3alL8pXbasCzACQrDTh-JMlmZaifk4dBCcNIdXyu0e_kZQJHD7YTYYqCWnSwsONrcMQXbku-XvIjWWM7YaxspvLGhlQzCopHauQntRzg"/>
+</div>
+<div class="grid grid-cols-3 gap-base">
+<div class="h-[120px] rounded-lg overflow-hidden glass-panel cursor-pointer hover:ambient-shadow transition-all">
+<img alt="Street view perspective" class="w-full h-full object-cover" data-alt="A street-level perspective looking up at a modern outdoor billboard in an urban setting. The lighting is bright and even, highlighting the clear visibility of the ad space from the pedestrian point of view. The scene fits a high-end, clean architectural aesthetic with soft, natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB1Ysw6EuqQ-mQAr1rmUdGiJbD8NJ2PxQqzu7pZKpLeyS1sh-nQq7q0cyXVCup0h0GQC3veKwDt1RrROvj73g5I0dE2fMmfaOV8HBaIK2KAIBPXlH4zdSzMR_UuPgn0HwIa0R3r1WOb_vXw6zL-gcazuXlh58-a_v2JkfSgQ5YA9Kcb4HdGifILX9fBEHtiKkVCWTaOvgGqPjiVEYp5L9HCtmOKa6rUhy3sCfgMVg8nk3wH-t_wrWIqQCD0ALL414lDm7bRygs4w"/>
+</div>
+<div class="h-[120px] rounded-lg overflow-hidden glass-panel cursor-pointer hover:ambient-shadow transition-all">
+<img alt="Distance perspective" class="w-full h-full object-cover" data-alt="A medium-distance shot of a premium billboard integrated smoothly into a commercial district. The image emphasizes the scale and prominence of the ad space against nearby modern glass buildings. The color palette is bright and neutral, supporting a sleek light-theme interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4GtM0yJ3W3182yj-yEySrgCg-By3XmqESOQ3Lv9Ya01NQ76cuyiHY137g5PetCVjfzEssqCWGv5x46Tqvt0A4TK9HhEU9whnPkyy5iF1rLvQjzjsuV2lVBEozMr_VZ_IypFOlYk4O8rZUzuVVxWqcrqjyzpqUAQq7lXx8JNM05mjHWkxWKP8o8J9ob2jSo15xggcVnk_RWS_SJBEZBrccdwS-Hjl8mLE4rQf4t8N486wDex1hgyp8kK2e8j01dRuvfpnDlOdCnA"/>
+</div>
+<div class="h-[120px] rounded-lg overflow-hidden glass-panel cursor-pointer flex items-center justify-center bg-surface-container-high hover:bg-surface-variant transition-colors relative">
+<span class="material-symbols-outlined text-outline text-4xl" data-icon="map">map</span>
+</div>
+</div>
+</section>
+<!-- Below Fold: Analytics & Specs -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter mt-[40px]">
+<!-- Technical Specs -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Technical Specifications</h3>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-1">Size</p>
+<p class="font-body-lg text-body-lg text-on-surface">20' x 40'</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-1">Type</p>
+<p class="font-body-lg text-body-lg text-on-surface">Static Frontlit</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-1">Orientation</p>
+<p class="font-body-lg text-body-lg text-on-surface">South Facing</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-1">Illumination</p>
+<p class="font-body-lg text-body-lg text-on-surface">LED 6PM - 6AM</p>
+</div>
+</div>
+</div>
+<!-- Location Insights -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-4">
+<h3 class="font-headline-md text-headline-md text-on-surface">Location Insights</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Located on the primary arterial route connecting the IT hub to the residential district. This site benefits from significant congestion during peak hours, maximizing dwell time.</p>
+<div class="flex flex-wrap gap-2 mt-2">
+<span class="px-3 py-1 bg-surface-container rounded-full font-label-caps text-label-caps text-on-surface-variant border border-outline-variant">High Traffic</span>
+<span class="px-3 py-1 bg-surface-container rounded-full font-label-caps text-label-caps text-on-surface-variant border border-outline-variant">IT Corridor</span>
+<span class="px-3 py-1 bg-surface-container rounded-full font-label-caps text-label-caps text-on-surface-variant border border-outline-variant">Signal Proximity</span>
+</div>
+</div><div class="glass-panel rounded-xl p-6 flex flex-col gap-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Audience Demographics</h3>
+<div class="grid grid-cols-1 gap-4">
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-2">Primary Age Group</p>
+<div class="flex items-center gap-4">
+<span class="font-body-lg text-body-lg text-on-surface">25 - 40 Years</span>
+<div class="flex-1 h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-1">Gender Split</p>
+<p class="font-body-md text-body-md text-on-surface">55% Male / 45% Female</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider mb-1">Occupation</p>
+<p class="font-body-md text-body-md text-on-surface">Professionals &amp; Students</p>
+</div>
+</div>
+</div>
+</div><div class="glass-panel rounded-xl p-6 flex flex-col gap-4 md:col-span-1">
+<h3 class="font-headline-md text-headline-md text-on-surface">Nearby Points of Interest</h3>
+<ul class="flex flex-col gap-3">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="business">business</span>
+<span class="font-body-md text-body-md text-on-surface-variant">500m from Global Tech Park</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Adjacent to City Mall</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="train">train</span>
+<span class="font-body-md text-body-md text-on-surface-variant">200m from Central Metro</span>
+</li>
+</ul>
+</div>
+<!-- Analytics Dashboard -->
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-6 md:col-span-2 mt-[20px]">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Performance Analytics</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Estimated daily reach based on historical traffic data.</p>
+</div>
+<div class="text-right">
+<p class="font-display-lg text-display-lg text-primary">~45k</p>
+<p class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Daily Impressions</p>
+</div>
+</div>
+<!-- Chart Placeholder -->
+<div class="w-full h-[200px] bg-gradient-to-t from-primary/5 to-transparent border-b border-l border-outline-variant relative flex items-end px-4 gap-2">
+<!-- Mock Bars -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors h-[40%] rounded-t-sm relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface font-label-caps text-label-caps px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">8AM: 12k</div>
+</div>
+<div class="flex-1 bg-primary/40 hover:bg-primary/60 transition-colors h-[80%] rounded-t-sm relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface font-label-caps text-label-caps px-2 py-1 rounded hidden group-hover:block whitespace-nowrap">10AM: 28k</div>
+</div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors h-[50%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/10 hover:bg-primary/30 transition-colors h-[30%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/60 hover:bg-primary/80 transition-colors h-[90%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/30 hover:bg-primary/50 transition-colors h-[60%] rounded-t-sm"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Booking & Specs (Sticky) -->
+<div class="lg:col-span-4 relative">
+<div class="sticky top-[100px] glass-panel rounded-xl p-6 ambient-shadow flex flex-col gap-6 border-t border-white">
+<!-- Header & Price -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-[#10B981]/10 text-[#10B981] font-label-caps text-label-caps border border-[#10B981]/20">
+<span class="w-2 h-2 rounded-full bg-[#10B981] mr-2"></span> Available Now
+                        </span><span class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary font-label-caps text-label-caps border border-primary/20 ml-2"><span class="material-symbols-outlined text-[16px] mr-1" style="font-variation-settings: 'FILL' 1">star</span> 9.2/10 Visibility</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mt-2">Khandagiri Main Road Hoarding</h1>
+<div class="flex flex-col gap-2 mt-4">
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface">₹850</span>
+<span class="font-body-lg text-body-lg text-on-surface-variant">/ day</span>
+</div>
+<div class="flex gap-4 mt-1">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Weekly</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">₹5,400</span>
+</div>
+<div class="w-px bg-outline-variant/30 h-8 self-center"></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-outline uppercase">Monthly</span>
+<span class="font-body-md text-body-md text-on-surface font-semibold">₹22,500</span>
+</div>
+</div>
+</div>
+</div>
+<hr class="border-outline-variant/30"/>
+<!-- Booking Form -->
+<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Select Dates</label>
+<div class="flex gap-2">
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="calendar_today">calendar_today</span>
+<input class="w-full pl-9 pr-3 py-2 bg-surface border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary shadow-inner text-sm font-body-md" placeholder="Start Date" type="text"/>
+</div>
+<div class="flex-1 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="calendar_today">calendar_today</span>
+<input class="w-full pl-9 pr-3 py-2 bg-surface border border-outline-variant rounded focus:border-primary focus:ring-1 focus:ring-primary shadow-inner text-sm font-body-md" placeholder="End Date" type="text"/>
+</div>
+</div>
+</div>
+<!-- Summary -->
+<div class="bg-surface-container rounded-lg p-4 flex flex-col gap-2 border border-outline-variant/50">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>₹850 x 14 days</span>
+<span>₹11,900</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Service Fee</span>
+<span>₹595</span>
+</div>
+<hr class="border-outline-variant/30 my-1"/>
+<div class="flex justify-between font-headline-md text-headline-md text-on-surface">
+<span>Total</span>
+<span>₹12,495</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 mt-2">
+<button class="w-full py-4 bg-primary text-on-primary rounded-full font-headline-md text-headline-md font-semibold hover:bg-primary-fixed-variant transition-colors shadow-lg shadow-primary/20">Confirm Booking</button>
+<button class="w-full py-3 bg-transparent border border-primary text-primary rounded-full font-body-md text-body-md font-semibold hover:bg-primary/5 transition-colors">Download Specs PDF</button>
+</div>
+<p class="text-center font-label-caps text-label-caps text-outline mt-2">You won't be charged yet.</p>
+</div>
+</div>
+</main>
+</body></html>

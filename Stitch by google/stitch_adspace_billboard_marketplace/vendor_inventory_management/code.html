@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AdSpace - Vendor Inventory Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Outfit:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#00714d",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffede6",
+                        "surface-container-low": "#f3f3fe",
+                        "secondary-container": "#6cf8bb",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-secondary-fixed": "#002113",
+                        "surface-variant": "#e1e2ed",
+                        "on-primary-container": "#eeefff",
+                        "on-background": "#191b23",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary-container": "#bc4800",
+                        "background": "#faf8ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e1e2ed",
+                        "primary": "#004ac6",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-container": "#ededf9",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-bright": "#faf8ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface-container-high": "#e7e7f3",
+                        "surface-dim": "#d9d9e5",
+                        "surface-tint": "#0053db",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-surface-variant": "#434655",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary": "#943700",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2e3039",
+                        "inverse-primary": "#b4c5ff",
+                        "surface": "#faf8ff",
+                        "primary-fixed": "#dbe1ff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#00174b",
+                        "on-surface": "#191b23",
+                        "outline": "#737686",
+                        "secondary": "#006c49"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "container-max": "1440px",
+                        "margin-mobile": "20px",
+                        "base": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Outfit"],
+                        "display-lg": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden lg:flex flex-col h-screen fixed left-0 top-0 py-base bg-surface/80 backdrop-blur-2xl dark:bg-inverse-surface/80 border-r border-white/40 shadow-xl shadow-blue-900/5 w-64 z-40">
+<div class="px-6 py-4 flex items-center gap-4 mb-8">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">
+                A
+            </div>
+<div>
+<h1 class="font-display-lg text-headline-md text-primary">AdSpace</h1>
+<p class="text-on-surface-variant font-label-caps text-label-caps">OOH Marketplace</p>
+</div>
+</div>
+<ul class="flex-1 px-2 space-y-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+                    Map View
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary text-on-primary rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="format_list_bulleted" style="font-variation-settings: 'FILL' 1;">format_list_bulleted</span>
+                    Listings
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+                    Saved
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                    Orders
+                </a>
+</li>
+</ul>
+<div class="p-6">
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-full font-body-md text-body-md hover:bg-primary/90 transition-colors shadow-sm">
+                Post an Ad
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 lg:ml-64 w-full">
+<!-- TopAppBar Contextual (Mobile & Search/Filter row) -->
+<header class="sticky top-0 w-full z-30 flex justify-between items-center px-margin-mobile lg:px-margin-desktop py-4 backdrop-blur-md bg-surface/60 border-b border-white/40 shadow-sm shadow-blue-900/5">
+<div class="flex items-center gap-4 lg:hidden">
+<button class="text-on-surface p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-display-lg text-headline-md font-bold text-primary">AdSpace</h1>
+</div>
+<div class="hidden lg:flex items-center flex-1 max-w-md mx-4">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md transition-all placeholder:text-outline shadow-inner" placeholder="Search inventory..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors hidden lg:block">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors hidden lg:block">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold lg:hidden">
+                    V
+                </div>
+<button class="hidden lg:flex px-4 py-2 bg-surface-container-highest text-on-surface font-body-md text-body-md rounded-full items-center gap-2 border border-outline-variant hover:bg-surface-dim transition-colors">
+                    Vendor Portal
+                </button>
+</div>
+</header>
+<div class="p-margin-mobile lg:p-margin-desktop max-w-container-max mx-auto space-y-8 lg:space-y-[80px]">
+<!-- Dashboard Header & Actions -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Inventory Management</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Overview of all your billboard assets and their current performance.</p>
+</div>
+<div class="flex gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-3 bg-surface text-primary border border-primary rounded-full font-body-md text-body-md hover:bg-primary/5 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">download</span>
+                        Export
+                    </button>
+<button class="flex-1 md:flex-none px-6 py-3 bg-primary text-on-primary rounded-full font-body-md text-body-md hover:bg-primary/90 transition-colors shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                        Add New Billboard
+                    </button>
+</div>
+</section>
+<!-- Stats Overview (Bento Grid Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface/60 backdrop-blur-3xl border border-white/40 p-6 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.05)] relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-2xl"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">TOTAL ACTIVE ASSETS</p>
+<h3 class="font-display-lg text-display-lg text-on-surface">42</h3>
+<div class="flex items-center gap-2 mt-4">
+<span class="text-secondary flex items-center text-sm font-semibold"><span class="material-symbols-outlined text-[16px]">arrow_upward</span> 12%</span>
+<span class="text-on-surface-variant text-sm">vs last month</span>
+</div>
+</div>
+<div class="bg-surface/60 backdrop-blur-3xl border border-white/40 p-6 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.05)] relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-secondary/5 rounded-full blur-2xl"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">OCCUPANCY RATE</p>
+<h3 class="font-display-lg text-display-lg text-on-surface">85%</h3>
+<div class="flex items-center gap-2 mt-4">
+<span class="text-secondary flex items-center text-sm font-semibold"><span class="material-symbols-outlined text-[16px]">arrow_upward</span> 5%</span>
+<span class="text-on-surface-variant text-sm">vs last month</span>
+</div>
+</div>
+<div class="bg-surface/60 backdrop-blur-3xl border border-white/40 p-6 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.05)] relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-tertiary/5 rounded-full blur-2xl"></div>
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-2">MONTHLY REVENUE</p>
+<h3 class="font-display-lg text-display-lg text-on-surface">$124.5k</h3>
+<div class="flex items-center gap-2 mt-4">
+<span class="text-secondary flex items-center text-sm font-semibold"><span class="material-symbols-outlined text-[16px]">arrow_upward</span> 8%</span>
+<span class="text-on-surface-variant text-sm">vs last month</span>
+</div>
+</div>
+</section>
+<!-- Inventory Grid -->
+<section>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Asset Listings</h3>
+<div class="flex gap-2">
+<button class="p-2 bg-surface border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg flex p-1">
+<button class="px-3 py-1 bg-surface shadow-sm rounded text-primary font-semibold text-sm">Grid</button>
+<button class="px-3 py-1 text-on-surface-variant hover:text-on-surface text-sm">List</button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Card 1 (Occupied) -->
+<article class="group bg-surface/60 backdrop-blur-[24px] border border-white/40 p-4 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.05)] hover:shadow-[0_12px_40px_rgb(0,74,198,0.1)] transition-all duration-300 flex flex-col">
+<div class="relative w-full h-48 rounded-lg overflow-hidden mb-4">
+<img alt="Billboard" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A large digital billboard glowing brightly against a sleek, modern city skyline at dusk. The scene is shot with a crisp, light-mode aesthetic, utilizing high-key lighting to emphasize the structural elegance of the billboard against soft pastel clouds. Deep royal blue accents subtle highlight the architectural glass nearby. The overall mood is premium, urban, and highly transparent." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7JI16UsIWQXWfQwJENuzqu-dtBNWVDhpmLPKCdutdq6axYVDjEftOxksIZCsKrgL-qKifAll_Orlkjc51xHCMiONlYVwPUmWhbERvrYT6ook0xzCzQ7fQ9Yqd-axmB9tfxQ5B9E68KbWyxbLELWcrlSPxQ-gH4DEeNxOgf77fPbj3tfiqkD7qaCSVpduBGR58U7DUP70HrGM51uBOCNPW9SqYs0BTRc-0BXbYxvHjZa2KvtcsD_1U98RDOjNDp6GwC3WbIslXBA"/>
+<div class="absolute top-3 left-3 bg-primary/90 backdrop-blur text-on-primary px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Occupied
+                            </div>
+</div>
+<div class="flex-1">
+<h4 class="font-headline-md text-body-lg font-bold text-on-surface mb-1">Times Square Digital Premium</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> New York, NY
+                            </p>
+<div class="grid grid-cols-2 gap-4 mb-6 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<div>
+<p class="text-xs text-on-surface-variant font-label-caps mb-1">CURRENT BOOKING</p>
+<p class="font-semibold text-sm text-on-surface">Oct 1 - Dec 31</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-label-caps mb-1">REVENUE (YTD)</p>
+<p class="font-semibold text-sm text-on-surface">$45,000</p>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mt-auto pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2 text-primary border border-primary/20 bg-primary/5 rounded-full font-body-md text-sm hover:bg-primary/10 transition-colors">Edit Listing</button>
+<button class="p-2 text-on-surface-variant border border-outline-variant/50 rounded-full hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">analytics</span>
+</button>
+</div>
+</article>
+<!-- Card 2 (Available) -->
+<article class="group bg-surface/60 backdrop-blur-[24px] border border-white/40 p-4 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.05)] hover:shadow-[0_12px_40px_rgb(0,74,198,0.1)] transition-all duration-300 flex flex-col">
+<div class="relative w-full h-48 rounded-lg overflow-hidden mb-4">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-variant to-surface-container"></div>
+<img alt="Billboard" class="w-full h-full object-cover mix-blend-overlay group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist highway billboard structure standing tall against a bright, clear midday sky. The sleek metal framework is highly detailed, shot from a low angle to emphasize its commanding presence. The lighting is crisp and natural, highlighting the stark white and metallic finishes of the structure. The composition is clean, with generous negative space evoking a premium, modern advertising space waiting to be filled." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKvH5Ep4VOuNHdwStbSzBNvC0wxPIcIossBQWxbqNSIlmUvOSJPAm7J_vam4NgV2GIXxMdLTsJa7L7HPGu6ZbJfRJLdD21sdC-pMbeDmU89vauzNQ_dGDVZbSnf3vf-383uSsDKIihr4myGKvJlmWZtZqEKuzT2IHDZ0AUtPw0p2YELCHL5ZimGwvfnWykXU6x7pdw8KtgAAXKLDPDW8z45tbRvD58BVbYj5ru4yvPLl9uMV4v6vm_rTKIUqObbM4It2E85nfoHQ"/>
+<div class="absolute top-3 left-3 bg-secondary/10 backdrop-blur border border-secondary text-secondary px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">event_available</span> Available Now
+                            </div>
+</div>
+<div class="flex-1">
+<h4 class="font-headline-md text-body-lg font-bold text-on-surface mb-1">I-95 Northbound Bullet</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Miami, FL
+                            </p>
+<div class="grid grid-cols-2 gap-4 mb-6 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30 opacity-70">
+<div>
+<p class="text-xs text-on-surface-variant font-label-caps mb-1">NEXT AVAILABLE</p>
+<p class="font-semibold text-sm text-on-surface">Immediate</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-label-caps mb-1">RATE (EST)</p>
+<p class="font-semibold text-sm text-on-surface">$12,500/mo</p>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mt-auto pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2 text-primary border border-primary/20 bg-primary/5 rounded-full font-body-md text-sm hover:bg-primary/10 transition-colors">Edit Listing</button>
+<button class="p-2 text-on-surface-variant border border-outline-variant/50 rounded-full hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">analytics</span>
+</button>
+</div>
+</article>
+<!-- Card 3 (Maintenance) -->
+<article class="group bg-surface/60 backdrop-blur-[24px] border border-white/40 p-4 rounded-xl shadow-[0_8px_30px_rgb(0,74,198,0.05)] hover:shadow-[0_12px_40px_rgb(0,74,198,0.1)] transition-all duration-300 flex flex-col">
+<div class="relative w-full h-48 rounded-lg overflow-hidden mb-4">
+<img alt="Billboard" class="w-full h-full object-cover grayscale opacity-80 group-hover:scale-105 transition-transform duration-500" data-alt="An urban static billboard integrated into the side of a contemporary glass and steel building. The scene is slightly desaturated to suggest a paused state, set against a bright, overcast sky. The lighting is soft and diffused, emphasizing the sleek textures of the surrounding architecture. A subtle, high-end construction or maintenance vibe is present, maintaining a clean, premium visual aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMTRuS-kYallMsmoltZEZ6CNZK_fo2y2hR3PVxvp3Ii1CVQaAh0LH3V3d5We3B06nkfLiIE8PY2aAbQ58eOaK4ND7hwdKry-763PFoXcaoW4Il1uVmzQ6iYRFiv_sDWXvFKTulQDinJ6bAQ4LVoimeNVBrfKIUOWHmEZw4c4Ni1M2maJ0xwOfnaui4sQk2pWUJRO1Z0uled_TaZJ9DQzQV-tzzRgOIOQt2jYHTS5gOE7H_VvDSvxS8ErkmLITUxs1ew6Lf4SVPCw"/>
+<div class="absolute top-3 left-3 bg-surface-variant/90 backdrop-blur text-on-surface-variant px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-sm border border-outline/30">
+<span class="material-symbols-outlined text-[14px]">build</span> Maintenance
+                            </div>
+</div>
+<div class="flex-1">
+<h4 class="font-headline-md text-body-lg font-bold text-on-surface mb-1">Downtown Static Wrap</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Chicago, IL
+                            </p>
+<div class="grid grid-cols-2 gap-4 mb-6 p-3 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<div>
+<p class="text-xs text-on-surface-variant font-label-caps mb-1">STATUS</p>
+<p class="font-semibold text-sm text-on-surface">LED Repair</p>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant font-label-caps mb-1">EST. COMPLETION</p>
+<p class="font-semibold text-sm text-on-surface">Nov 15</p>
+</div>
+</div>
+</div>
+<div class="flex gap-2 mt-auto pt-4 border-t border-outline-variant/20">
+<button class="flex-1 py-2 text-primary border border-primary/20 bg-primary/5 rounded-full font-body-md text-sm hover:bg-primary/10 transition-colors">View Details</button>
+</div>
+</article>
+</div>
+<div class="mt-8 flex justify-center">
+<button class="px-6 py-2 text-primary font-semibold hover:bg-primary/5 rounded-full transition-colors flex items-center gap-2">
+                        Load More <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+</body></html>

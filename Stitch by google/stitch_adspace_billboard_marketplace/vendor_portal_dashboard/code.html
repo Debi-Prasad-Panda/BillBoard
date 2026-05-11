@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AdSpace - Vendor Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#004ac6",
+                        "inverse-primary": "#b4c5ff",
+                        "background": "#faf8ff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-background": "#191b23",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface-variant": "#e1e2ed",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "inverse-on-surface": "#f0f0fb",
+                        "surface-container-highest": "#e1e2ed",
+                        "tertiary-container": "#bc4800",
+                        "primary-container": "#2563eb",
+                        "secondary-container": "#6cf8bb",
+                        "surface": "#faf8ff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ededf9",
+                        "surface-dim": "#d9d9e5",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "outline": "#737686",
+                        "on-surface-variant": "#434655",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "outline-variant": "#c3c6d7",
+                        "on-secondary-container": "#00714d",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f3f3fe",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-secondary-fixed": "#002113",
+                        "secondary-fixed": "#6ffbbe",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#943700",
+                        "on-surface": "#191b23",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "inverse-surface": "#2e3039",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#00174b",
+                        "secondary": "#006c49",
+                        "surface-bright": "#faf8ff",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-tertiary-container": "#ffede6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "margin-desktop": "64px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Outfit"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px -5px rgba(0, 74, 198, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="hidden lg:flex flex-col h-screen fixed left-0 top-0 py-base bg-surface/80 backdrop-blur-2xl dark:bg-inverse-surface/80 border-r border-white/40 shadow-xl shadow-blue-900/5 docked left-0 w-64 z-40">
+<div class="px-6 py-8">
+<h1 class="font-display-lg text-headline-md text-primary font-bold">AdSpace</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">OOH Marketplace</p>
+</div>
+<div class="flex-1 px-4 space-y-2 mt-4">
+<!-- Active Tab: Intent mapping to Vendor Dashboard Overview -->
+<a class="flex items-center px-4 py-3 bg-primary text-on-primary rounded-full mx-2 font-body-md text-body-md transition-all" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Overview
+            </a>
+<a class="flex items-center px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all" href="#">
+<span class="material-symbols-outlined mr-3">map</span>
+                Map View
+            </a>
+<a class="flex items-center px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all" href="#">
+<span class="material-symbols-outlined mr-3">format_list_bulleted</span>
+                Listings
+            </a>
+<a class="flex items-center px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all" href="#">
+<span class="material-symbols-outlined mr-3">bookmark</span>
+                Saved
+            </a>
+<a class="flex items-center px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 rounded-full mx-2 font-body-md text-body-md hover:backdrop-blur-lg transition-all" href="#">
+<span class="material-symbols-outlined mr-3">shopping_bag</span>
+                Orders
+            </a>
+</div>
+<div class="px-6 pb-8 mt-auto">
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-full font-body-md text-body-md font-bold shadow-md hover:bg-primary-container transition-colors">
+                Post an Ad
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 lg:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 w-full z-30 flex justify-between items-center px-margin-desktop py-4 backdrop-blur-md bg-surface/60 dark:bg-inverse-surface/60 border-b border-white/40 dark:border-outline/20 shadow-sm shadow-blue-900/5">
+<div class="flex-1 max-w-xl flex items-center">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md shadow-inner transition-colors" placeholder="Search inventory, campaigns..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<nav class="hidden md:flex space-x-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Marketplace</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Analytics</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md" href="#">Campaigns</a>
+</nav>
+<div class="flex items-center space-x-4 border-l border-outline-variant pl-6">
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 32px;">account_circle</span>
+</button>
+<button class="px-4 py-2 border border-primary text-primary rounded-full font-body-md text-body-md font-bold hover:bg-primary/5 transition-all duration-300">
+                        Vendor Portal
+                    </button>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Vendor Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Welcome back. Here is your inventory performance.</p>
+</div>
+<button class="px-6 py-3 bg-primary text-on-primary rounded-full font-body-md text-body-md font-bold shadow-md hover:bg-primary-container transition-colors flex items-center">
+<span class="material-symbols-outlined mr-2">add</span>
+                    List New Billboard
+                </button>
+</div>
+<!-- Performance Overview Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+<!-- Revenue Card -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Total Revenue</h3>
+<div class="p-2 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-background mb-1">₹12,45,000</div>
+<div class="flex items-center text-secondary font-body-md text-body-md">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span>
+<span>+12% this month</span>
+</div>
+</div>
+<!-- Occupancy Card -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Inventory Occupancy</h3>
+<div class="p-2 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary">pie_chart</span>
+</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-background mb-1">85%</div>
+<div class="flex items-center text-on-surface-variant font-body-md text-body-md">
+<span>17/20 boards active</span>
+</div>
+</div>
+<!-- Requests Card -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Pending Requests</h3>
+<div class="p-2 bg-tertiary-container/10 rounded-full">
+<span class="material-symbols-outlined text-tertiary-container">pending_actions</span>
+</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-background mb-1">5</div>
+<div class="flex items-center text-on-surface-variant font-body-md text-body-md">
+<span>New booking inquiries</span>
+</div>
+</div>
+<!-- Reach Card -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Avg. Daily Reach</h3>
+<div class="p-2 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary">visibility</span>
+</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-background mb-1">1.2M</div>
+<div class="flex items-center text-on-surface-variant font-body-md text-body-md">
+<span>Across all boards</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout for Main Sections -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Active Bookings (Takes up 2 columns) -->
+<div class="lg:col-span-2 glass-panel rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-background">Active Campaigns</h3>
+<button class="text-primary font-body-md text-body-md font-bold hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/50">
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant">Client</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant">Location</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant">Duration</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant text-right">Revenue</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 px-4 flex items-center">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold mr-3">G</div>
+                                        Global Tech
+                                    </td>
+<td class="py-4 px-4 text-on-surface-variant">Times Square Main</td>
+<td class="py-4 px-4">
+<span class="px-2 py-1 bg-secondary/10 text-secondary rounded-full text-sm">Oct 1 - Nov 30</span>
+</td>
+<td class="py-4 px-4 text-right font-bold">₹4,50,000</td>
+</tr>
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 px-4 flex items-center">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary-container font-bold mr-3">Z</div>
+                                        Zenith Auto
+                                    </td>
+<td class="py-4 px-4 text-on-surface-variant">Highway 101 South</td>
+<td class="py-4 px-4">
+<span class="px-2 py-1 bg-secondary/10 text-secondary rounded-full text-sm">Oct 15 - Dec 15</span>
+</td>
+<td class="py-4 px-4 text-right font-bold">₹3,20,000</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest/50 transition-colors">
+<td class="py-4 px-4 flex items-center">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold mr-3">A</div>
+                                        Apex Retail
+                                    </td>
+<td class="py-4 px-4 text-on-surface-variant">Downtown Crossing</td>
+<td class="py-4 px-4">
+<span class="px-2 py-1 bg-secondary/10 text-secondary rounded-full text-sm">Nov 1 - Nov 30</span>
+</td>
+<td class="py-4 px-4 text-right font-bold">₹2,80,000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Top Performing Billboards (Takes 1 column) -->
+<div class="glass-panel rounded-xl p-6 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Top Inventory</h3>
+<div class="space-y-4 flex-1">
+<!-- Item 1 -->
+<div class="flex items-center p-3 rounded-lg hover:bg-surface-container-lowest/50 transition-colors border border-transparent hover:border-outline-variant/30 cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high bg-cover bg-center mr-4" data-alt="A vivid night-time view of a glowing digital billboard in a bustling city center, reflecting light onto the wet street. The scene is modern, urban, and high-energy, with a cool blue and white light aesthetic matching the AdSpace brand, surrounded by sleek glass architecture." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEO4g2H9eDEXqii9NM3gjKc1q-Lv5gdmK8hDxWYvG9bDihxk01sKnhi_hDUGEZbQPoWXeexUcO1uwllZAMEll9eBKibusjTCn_Q9dm9zvbxwWR4MnvDi4ReN07HrFj785TnWTC3a_lHv1jzyu7FhZZldOY6ESFVDYLxpWY3WwCOfhTGaKADIUIGDgpYZ3LlaWjGV-f5lUXNgjzYMtCjMAften5S7hOl3wSZrPhx4VGCkeYGJqfNEHbBDHSsYvk4xVbtpVCXFg14A');"></div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-bold text-on-background">Times Square Main</h4>
+<p class="text-sm text-on-surface-variant">450k Daily Impr.</p>
+</div>
+<div class="text-right">
+<div class="font-bold text-primary">₹12k/d</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center p-3 rounded-lg hover:bg-surface-container-lowest/50 transition-colors border border-transparent hover:border-outline-variant/30 cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high bg-cover bg-center mr-4" data-alt="A wide, panoramic shot of a sleek highway billboard standing tall against a clear, light-blue morning sky. The structure is modern and minimalist, catching the early light. The surrounding landscape is clean and open, emphasizing a premium, high-visibility advertising space in a high-trust, professional context." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDsbjEUHNtRz_t5b5dZ1XLkN9mj7a8JKWmCFZl8OoS7VVQnASzQX4WFkhmQ6OfJkH65FhjGuFFYE_7FbPZuIDor3cfRLOqOAX5yYR4sD8RXhTYwPVgIeGsYxfu22Gjn2M2YtUeJRli_rIKXFLcBiNi-2apRED1CWJu-J3JbaRF7QZmIUacA9-LsDWK9gNt91xkSHFwr4x0sHbMbQ8ss66gN2ALgB3PeTzph3BLdk8G3X87LUXk6UJ9ZVxKIu8p1s7flW79l8Ul48g');"></div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-bold text-on-background">Highway 101 South</h4>
+<p class="text-sm text-on-surface-variant">320k Daily Impr.</p>
+</div>
+<div class="text-right">
+<div class="font-bold text-primary">₹8k/d</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center p-3 rounded-lg hover:bg-surface-container-lowest/50 transition-colors border border-transparent hover:border-outline-variant/30 cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high bg-cover bg-center mr-4" data-alt="An urban subway station featuring a bright, backlit advertising panel integrated into a sleek, tiled wall. The lighting is pristine and uniform, casting a cool, modern glow. The environment feels high-end, clean, and highly trafficked, fitting a premium out-of-home advertising marketplace aesthetic with soft, ambient reflections." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAqrPX2lQns8XlChBSQqFBw0vEePxShtIy-W7Si7D_G6UBnXSwNADVYZfI3OPgEzkEzZIAcIe3DQTcFSCGS0SrFERP9V1XAxMDnirRaxonmFD4ck49uA0l3BzcV_5jYsGz4B1jwFZ50K5sg0WcFSOid5mW2uend5zGLogFA3BCwzWMbv8i7yXtU-UGpd5bU4EoP-kxg8QhaQvDu1wHccyEtQn2L34plybYqqh3RmS21aDdnXU4Q_dg0jBzp1tY8c9xyYmEd9qDXHQ');"></div>
+<div class="flex-1">
+<h4 class="font-body-md text-body-md font-bold text-on-background">Downtown Crossing</h4>
+<p class="text-sm text-on-surface-variant">280k Daily Impr.</p>
+</div>
+<div class="text-right">
+<div class="font-bold text-primary">₹6.5k/d</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-outline-variant rounded-full text-on-surface-variant font-body-md text-body-md hover:bg-surface-variant/20 transition-colors">
+                        Manage Inventory
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>
