@@ -20,6 +20,7 @@ const DynamicMap = dynamic(() => import('./MapComponent'), {
   )
 });
 
+
 type SortOption = "default" | "price-asc" | "price-desc" | "impressions-desc";
 type Filters = {
   sizes: string[];
@@ -414,10 +415,10 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
     setFilters(f => ({ ...f, [k]: v })), []);
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 overflow-hidden">
+<div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 items-stretch overflow-hidden">
 
       {/* ── Map Panel ────────────────────────────────────────────────────── */}
-      <section className="hidden lg:flex flex-[0.6] h-full relative border-r border-outline-variant/30 bg-surface-container-high">
+      <section className="flex-none w-full h-[400px] lg:w-[60%] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0 bg-surface-container-high">
         <div className="relative w-full h-full z-0">
           <DynamicMap billboards={filteredBillboards} hoveredPin={hoveredPin}
             setHoveredPin={setHoveredPin} viewState={viewState} setViewState={setViewState} />
@@ -430,6 +431,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
             <input type="text" placeholder="Search areas, types, sizes..."
               value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               className="bg-transparent border-none focus:ring-0 text-on-surface w-full text-sm placeholder:text-outline-variant outline-none"
+
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery("")} className="ml-2 flex-shrink-0">
@@ -441,8 +443,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
             </button>
           </div>
         </div>
-
-        {/* Pin count */}
+{/* Pin count */}
         <div className="absolute bottom-6 left-6 z-20">
           <div className="glass-panel rounded-full px-4 py-2 flex items-center gap-2 shadow text-sm font-medium text-on-surface">
             <MapPin className="w-4 h-4 text-primary" />
@@ -455,6 +456,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
       <section className="flex-1 lg:flex-[0.4] h-full bg-surface-bright flex flex-col z-30 shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)]">
 
         {/* Mobile search */}
+
         <div className="lg:hidden p-4 border-b border-outline-variant/30 bg-surface-bright sticky top-0 z-20">
           <div className="glass-panel rounded-full flex items-center px-4 py-3 border border-outline-variant/40">
             <Search className="w-4 h-4 text-outline mr-2 flex-shrink-0" />
