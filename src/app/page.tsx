@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   ArrowRight, MapPin, ShieldCheck, TrendingUp, Search,
   Star, Building2, Users, Zap, ChevronRight, CheckCircle2,
+  X, ChevronDown
 } from "lucide-react";
 
 /* ── Data ─────────────────────────────────────────────── */
@@ -149,7 +150,7 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.22 }}
             className="mt-6 text-lg md:text-xl text-on-surface-variant max-w-2xl leading-relaxed"
           >
-            Discover 12,000+ premium billboards. Book instantly, get GPS-verified
+            Discover 12,000+ high-visibility billboards. Book instantly, get GPS-verified
             proof of installation, and measure real campaign impact — all in one platform.
           </motion.p>
 
@@ -277,6 +278,30 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* ─── TRUSTED BY MARQUEE ─────────────────────────────── */}
+      <section className="py-10 bg-background border-t border-outline-variant/30 overflow-hidden" aria-label="Trusted brands">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-6">
+          Trusted by India's fastest-growing brands
+        </p>
+        <div className="relative flex w-full overflow-hidden" style={{ maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}>
+          <motion.div
+            className="flex gap-16 items-center whitespace-nowrap px-8"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ ease: "linear", duration: 30, repeat: Infinity }}
+          >
+            {[1, 2].map((set) => (
+              <div key={set} className="flex gap-16 items-center">
+                {["NourishCo", "QuickBite", "LuxeWear", "TechNova", "UrbanRoots", "FinServe"].map((brand) => (
+                  <span key={brand} className="text-2xl font-heading font-bold text-on-surface-variant/40">
+                    {brand}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── STATS ────────────────────────────────────────── */}
       <section
         className="py-14 border-y border-outline-variant/40"
@@ -300,6 +325,52 @@ export default function HomePage() {
                 </div>
                 <p className="text-3xl font-heading font-bold text-on-surface">{s.value}</p>
                 <p className="text-sm text-on-surface-variant mt-1">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FEATURED INVENTORY ────────────────────────────── */}
+      <section className="py-24 bg-background border-t border-outline-variant/40" aria-labelledby="featured-heading">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-16">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+              <span className="inline-block text-xs font-semibold uppercase tracking-widest text-primary mb-3 px-4 py-1.5 rounded-full"
+                style={{ background: "rgba(0,74,198,0.08)", border: "1px solid rgba(0,74,198,0.15)" }}>
+                Featured Spots
+              </span>
+              <h2 id="featured-heading" className="text-3xl md:text-4xl font-heading font-bold text-on-surface mt-2">
+                High-Impact <span className="gradient-text">Available Now</span>
+              </h2>
+            </div>
+            <Link href="/marketplace" className="text-sm font-semibold text-primary hover:underline mt-4 md:mt-0 flex items-center gap-1">
+              View all inventory <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { id: 1, loc: "Bhubaneswar Airport Road", type: "Digital · 40x20 ft", price: "₹35,000" },
+              { id: 2, loc: "Bandra Kurla Complex, Mumbai", type: "Static · 60x30 ft", price: "₹1,20,000" },
+              { id: 3, loc: "Connaught Place, Delhi", type: "Digital · 30x15 ft", price: "₹85,000" }
+            ].map((spot, i) => (
+              <motion.div key={spot.id} custom={i} initial="hidden" whileInView="show" viewport={{ once: true }} variants={fadeUp}
+                className="glass-panel rounded-2xl overflow-hidden ambient-shadow group cursor-pointer hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="h-48 bg-surface-variant flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 group-hover:scale-105 transition-transform duration-500" />
+                  <Building2 className="w-12 h-12 text-on-surface-variant/30 relative z-10" />
+                  <span className="absolute top-3 left-3 bg-secondary text-white text-[10px] font-bold px-2 py-1 rounded">AVAILABLE</span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-heading font-semibold text-lg text-on-surface">{spot.loc}</h3>
+                  <p className="text-sm text-on-surface-variant mt-1">{spot.type} · GPS Verified</p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <p className="text-primary font-bold">{spot.price} <span className="text-xs font-normal text-on-surface-variant">/ mo</span></p>
+                    <button className="px-4 py-1.5 rounded-full border border-primary text-primary text-xs font-semibold group-hover:bg-primary group-hover:text-white transition-colors">Book</button>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -431,6 +502,69 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── US VS TRADITIONAL ────────────────────────────── */}
+      <section className="py-24 bg-background border-t border-outline-variant/40" aria-labelledby="compare-heading">
+        <div className="max-w-[1000px] mx-auto px-6 lg:px-16">
+          <div className="text-center mb-16">
+            <h2 id="compare-heading" className="text-3xl md:text-4xl font-heading font-bold text-on-surface">
+              The AdSpace <span className="gradient-text">Advantage</span>
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-8 rounded-2xl border border-outline-variant bg-surface-container-low opacity-80">
+              <h3 className="font-heading font-semibold text-xl text-on-surface-variant mb-6 border-b border-outline-variant pb-4">Traditional OOH</h3>
+              <ul className="space-y-4">
+                {["Opaque, hidden pricing", "Slow, manual phone bookings", "No proof of installation", "High risk of vendor fraud", "No performance data"].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-on-surface-variant text-sm">
+                    <X className="w-5 h-5 text-error flex-shrink-0" /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="p-8 rounded-2xl glass-panel ambient-shadow border-primary/30 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary" />
+              <h3 className="font-heading font-bold text-xl text-primary mb-6 border-b border-primary/20 pb-4">AdSpace Platform</h3>
+              <ul className="space-y-4">
+                {["100% transparent pricing", "Instant 5-minute booking", "GPS-stamped photo verification", "Secure milestone payouts", "Real-time analytics dashboard"].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-on-surface text-sm font-medium">
+                    <CheckCircle2 className="w-5 h-5 text-secondary flex-shrink-0" /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ──────────────────────────────────────────── */}
+      <section className="py-24 border-t border-outline-variant/40" style={{ background: "var(--surface-container-low)" }} aria-labelledby="faq-heading">
+        <div className="max-w-[800px] mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 id="faq-heading" className="text-3xl font-heading font-bold text-on-surface">Frequently Asked Questions</h2>
+          </div>
+          <div className="space-y-4">
+            {[
+              { q: "How does GPS verification work?", a: "Vendors must upload photos of the installed flex through our app. The app automatically captures the exact GPS coordinates and timestamp, matching it against the billboard's listed location." },
+              { q: "Are the prices negotiable?", a: "Our platform offers a transparent bidding system for select high-visibility locations, but most inventory is available at guaranteed lowest upfront prices." },
+              { q: "How quickly can my campaign go live?", a: "Once your design is approved and payment is escrowed, printing and mounting typically takes 48-72 hours. Digital screens can go live in under 2 hours." },
+              { q: "What happens if a vendor doesn't install my ad?", a: "Your payment is held in escrow. If the vendor fails to provide GPS proof within the deadline, you receive an immediate, 100% refund." }
+            ].map((faq, i) => (
+              <details key={i} className="group glass-panel rounded-xl border border-outline-variant/50 overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex items-center justify-between p-5 font-semibold cursor-pointer text-on-surface">
+                  {faq.q}
+                  <ChevronDown className="w-5 h-5 text-on-surface-variant group-open:rotate-180 transition-transform" />
+                </summary>
+                <div className="px-5 pb-5 text-sm text-on-surface-variant leading-relaxed">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── TESTIMONIALS ─────────────────────────────────── */}
       <section className="py-24 bg-background" aria-labelledby="testimonials-heading">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-16">
@@ -484,6 +618,45 @@ export default function HomePage() {
                 </footer>
               </motion.blockquote>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── VENDOR SPLIT ─────────────────────────────────── */}
+      <section className="py-24 bg-background border-t border-outline-variant/40" aria-labelledby="vendor-heading">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-16">
+          <div className="glass-panel rounded-3xl ambient-shadow overflow-hidden flex flex-col lg:flex-row">
+            <div className="lg:w-1/2 p-12 md:p-16 flex flex-col justify-center">
+              <span className="inline-block text-xs font-semibold uppercase tracking-widest text-secondary mb-4">For Media Owners</span>
+              <h2 id="vendor-heading" className="text-3xl md:text-4xl font-heading font-bold text-on-surface mb-4">
+                Maximize your <span className="gradient-text">yield.</span>
+              </h2>
+              <p className="text-on-surface-variant leading-relaxed mb-8">
+                Stop chasing payments. List your empty billboards on AdSpace and connect with thousands of national brands. We guarantee on-time payouts for verified installations.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {["Zero listing fees", "Guaranteed 7-day payouts", "Digital contract management"].map((item) => (
+                  <li key={item} className="flex items-center gap-2 text-sm font-medium text-on-surface">
+                    <CheckCircle2 className="w-4 h-4 text-primary" /> {item}
+                  </li>
+                ))}
+              </ul>
+              <div>
+                <Link href="/vendors" className="inline-flex items-center gap-2 px-6 py-3 bg-on-background text-background font-semibold rounded-full hover:bg-on-background/90 transition-transform hover:scale-[1.02]">
+                  Become a Vendor <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+            <div className="lg:w-1/2 bg-surface-container flex items-center justify-center p-12">
+              <div className="w-full max-w-sm glass-panel rounded-2xl p-6 shadow-xl rotate-2">
+                <div className="flex items-center justify-between mb-6">
+                  <span className="font-semibold text-on-surface">Recent Booking</span>
+                  <span className="text-xs font-bold text-secondary bg-secondary/10 px-2 py-1 rounded">₹1,45,000 added</span>
+                </div>
+                <div className="h-2 w-3/4 bg-surface-variant rounded-full mb-3" />
+                <div className="h-2 w-1/2 bg-surface-variant rounded-full" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
