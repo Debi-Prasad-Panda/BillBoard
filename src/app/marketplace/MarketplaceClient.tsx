@@ -14,15 +14,12 @@ import {
 } from "lucide-react";
 import { Billboard } from "./page";
 
-// Dynamically import the Map component with SSR disabled
 const DynamicMap = dynamic(() => import('./MapComponent'), { 
   ssr: false,
   loading: () => (
-    <div className="w-full h-full bg-surface-container-high flex items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 opacity-50">
-        <Image src="/images/premium_map_placeholder.png" alt="Loading Map" fill className="object-cover" />
-      </div>
-      <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin z-10"></div>
+    <div className="w-full h-full bg-surface-container-high flex flex-col items-center justify-center gap-4">
+      <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      <p className="text-sm text-on-surface-variant font-medium">Loading map...</p>
     </div>
   )
 });
@@ -43,11 +40,11 @@ export default function MarketplaceClient({ initialBillboards }: MarketplaceClie
   });
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 overflow-hidden">
-      {/* Left: Interactive Map (60%) */}
-      <section className="hidden lg:flex flex-[0.6] h-full relative border-r border-outline-variant/30 bg-surface-container-high">
-        {/* Interactive Map Component */}
-        <div className="relative w-full h-full z-0 flex-1 min-h-[600px]">
+    <div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 items-stretch">
+      {/* Interactive Map (Top on mobile, Left on desktop) */}
+      <section className="flex-none w-full h-[400px] lg:w-[60%] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0">
+        {/* Map fills the entire panel */}
+        <div className="absolute inset-0">
           <DynamicMap 
             billboards={initialBillboards} 
             hoveredPin={hoveredPin} 
@@ -57,8 +54,8 @@ export default function MarketplaceClient({ initialBillboards }: MarketplaceClie
           />
         </div>
 
-        {/* Floating Search Overlay on Map */}
-        <div className="absolute top-6 left-6 right-6 flex justify-center pointer-events-none z-20">
+        {/* Floating Search Overlay on Map (Desktop only) */}
+        <div className="hidden lg:flex absolute top-6 left-6 right-6 justify-center pointer-events-none z-10">
           <div className="glass-panel rounded-full flex items-center px-6 py-4 shadow-lg ambient-shadow pointer-events-auto max-w-lg w-full">
             <Search className="w-5 h-5 text-outline mr-3" aria-hidden="true" />
             <input 
@@ -74,12 +71,10 @@ export default function MarketplaceClient({ initialBillboards }: MarketplaceClie
             </button>
           </div>
         </div>
-
-
       </section>
 
-      {/* Right: Listings Panel (40%) */}
-      <section className="flex-1 lg:flex-[0.4] h-full bg-surface-bright flex flex-col shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)] z-30">
+      {/* Listings Panel (Bottom on mobile, Right on desktop) */}
+      <section className="flex-1 lg:flex-none lg:w-[40%] bg-surface-bright flex flex-col overflow-hidden shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)] relative z-10">
         
         {/* Mobile Search/Filter Bar (visible only on small screens) */}
         <div className="lg:hidden p-4 border-b border-outline-variant/30 bg-surface-bright sticky top-0 z-20">
