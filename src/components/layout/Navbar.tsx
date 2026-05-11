@@ -14,6 +14,7 @@ import {
   UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navLinks = [
   {
@@ -142,6 +143,8 @@ export default function Navbar() {
 
         {/* Desktop CTA — right */}
         <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+          <ThemeToggle />
+          
           {/* Notification Bell */}
           <button
             aria-label="Notifications"
@@ -193,6 +196,10 @@ export default function Navbar() {
             aria-label="Mobile navigation"
           >
             <div className="max-w-[1440px] mx-auto px-6 py-4 flex flex-col gap-1">
+              <div className="flex items-center justify-between px-4 py-2 border-b border-outline-variant/30 mb-2">
+                <span className="text-sm font-medium text-on-surface-variant">Theme</span>
+                <ThemeToggle />
+              </div>
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
