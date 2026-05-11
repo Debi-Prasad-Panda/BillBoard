@@ -4,17 +4,17 @@ export const metadata: Metadata = {
   title: "For Media Owners & Vendors | Monetize Your OOH Inventory | AdSpace",
   description: "List your empty billboards, digital screens, and transit media on India's #1 OOH platform. Get guaranteed payouts, zero listing fees, and secure milestone escrow.",
   alternates: {
-    canonical: "https://www.adspace.com/vendors",
+    canonical: "https://adspace.in/vendors",
   },
   openGraph: {
     title: "AdSpace for Media Owners | Maximize Billboard Revenue",
     description: "Join hundreds of media owners increasing their occupancy rates. Guaranteed 7-day payouts, zero bad debts, and access to 4,800+ national brands.",
-    url: "https://www.adspace.com/vendors",
+    url: "https://adspace.in/vendors",
     siteName: "AdSpace",
     type: "website",
     images: [
       {
-        url: "https://www.adspace.com/og-vendors.jpg",
+        url: "https://adspace.in/og-vendors.jpg",
         width: 1200,
         height: 630,
         alt: "AdSpace Vendor Portal - Dashboard preview",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "List Your Billboards on AdSpace",
     description: "Zero listing fees and automated escrow payouts for media owners.",
-    images: ["https://www.adspace.com/twitter-vendors.jpg"],
+    images: ["https://adspace.in/twitter-vendors.jpg"],
   },
 };
 
@@ -78,13 +78,13 @@ export default function VendorsLayout({
     "@type": "WebPage",
     name: "For Media Owners & Vendors | AdSpace",
     description: "The premier platform for OOH media owners to list and monetize their billboard inventory.",
-    url: "https://www.adspace.com/vendors",
+    url: "https://adspace.in/vendors",
     publisher: {
       "@type": "Organization",
       name: "AdSpace",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.adspace.com/logo.png"
+        url: "https://adspace.in/logo.png"
       }
     }
   };

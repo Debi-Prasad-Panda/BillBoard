@@ -9,7 +9,6 @@ import {
   ChevronDown,
   MapPin,
   BarChart3,
-  Sparkles,
   Bell,
   UserCircle,
 } from "lucide-react";
@@ -20,7 +19,6 @@ const navLinks = [
   {
     label: "Marketplace",
     href: "/marketplace",
-    icon: <MapPin className="w-4 h-4" />,
     submenu: [
       { label: "Browse Billboards", href: "/marketplace", desc: "Explore all available inventory" },
       { label: "Map Discovery", href: "/marketplace/map", desc: "Find billboards near you on the map" },
@@ -28,21 +26,9 @@ const navLinks = [
       { label: "Transit Advertising", href: "/marketplace?type=transit", desc: "Bus shelters, metros & more" },
     ],
   },
-  {
-    label: "Analytics",
-    href: "/analytics",
-    icon: <BarChart3 className="w-4 h-4" />,
-  },
-  {
-    label: "Solutions",
-    href: "/solutions",
-    icon: <Sparkles className="w-4 h-4" />,
-    submenu: [
-      { label: "For Advertisers", href: "/advertisers", desc: "Run powerful outdoor campaigns" },
-      { label: "For Vendors", href: "/vendors", desc: "List and manage your inventory" },
-      { label: "Pricing", href: "/pricing", desc: "Transparent, competitive rates" },
-    ],
-  },
+  { label: "Advertisers", href: "/advertisers" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Analytics", href: "/analytics" },
   { label: "Campaigns", href: "/campaigns" },
 ];
 
@@ -75,7 +61,6 @@ export default function Navbar() {
           className="flex items-center gap-2 group flex-shrink-0"
           aria-label="AdSpace — OOH Billboard Marketplace Home"
         >
-          {/* Stitch-style "AS" monogram badge */}
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold font-heading transition-transform group-hover:scale-105"
             style={{ background: "linear-gradient(135deg, #004ac6 0%, #2563eb 100%)" }}
@@ -144,7 +129,7 @@ export default function Navbar() {
         {/* Desktop CTA — right */}
         <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
           <ThemeToggle />
-          
+
           {/* Notification Bell */}
           <button
             aria-label="Notifications"
@@ -161,7 +146,7 @@ export default function Navbar() {
             <UserCircle className="w-5 h-5" />
           </button>
 
-          {/* Vendor Portal — Stitch outlined pill button */}
+          {/* Vendor Portal CTA */}
           <Link
             href="/vendors"
             id="vendor-portal-btn"
