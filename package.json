@@ -12,19 +12,13 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.14.0",
-<<<<<<< HEAD
     "maplibre-gl": "^5.24.0",
     "next": "^16.2.6",
+    "next-themes": "^0.4.6",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-map-gl": "^8.1.1",
-=======
-    "next": "16.2.6",
-    "next-themes": "^0.4.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
     "recharts": "^3.8.1",
->>>>>>> e4ccb2d602a4f8a47475a8cd1ebe79f5ed8b434b
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
