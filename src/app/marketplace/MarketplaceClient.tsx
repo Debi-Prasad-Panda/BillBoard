@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { Search, SlidersHorizontal, ChevronDown, X, Maximize, Flame, Eye, MapPin, RotateCcw } from "lucide-react";
@@ -30,6 +31,17 @@ type Filters = {
   sortBy: SortOption;
 };
 
+// ── Compute dropdown position (synchronous, called inside pointer handler) ───
+function calcDropPos(btnEl: HTMLButtonElement, dropW: number) {
+  const r = btnEl.getBoundingClientRect();
+  // r.left/right/bottom are CSS viewport pixels — use directly with position:fixed
+  const wouldOverflow = r.right + dropW > window.innerWidth;
+  return {
+    top: r.bottom + 6,
+    left: wouldOverflow ? Math.max(8, r.right - dropW) : r.left,
+  };
+}
+
 // ── Dual Range Slider ────────────────────────────────────────────────────────
 function DualRangeSlider({
   min, max, low, high, onChange,
@@ -40,23 +52,29 @@ function DualRangeSlider({
   const trackRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<"low" | "high" | null>(null);
 
+  // Local editable strings for the input fields
+  const [lowStr, setLowStr] = useState(String(low));
+  const [highStr, setHighStr] = useState(String(high));
+
+  // Keep local strings in sync when external value changes (e.g. reset)
+  useEffect(() => { setLowStr(String(low)); }, [low]);
+  useEffect(() => { setHighStr(String(high)); }, [high]);
+
   const pct = (v: number) => ((v - min) / (max - min)) * 100;
 
   const valueFromPct = (clientX: number) => {
     const rect = trackRef.current!.getBoundingClientRect();
     const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
     const raw = min + ratio * (max - min);
-    return Math.round(raw / 100) * 100; // snap to step of 100
+    return Math.round(raw / 100) * 100;
   };
 
   const onTrackPointerDown = (e: React.PointerEvent) => {
     const val = valueFromPct(e.clientX);
-    // Pick whichever thumb is closer
     const distLow = Math.abs(val - low);
     const distHigh = Math.abs(val - high);
     dragging.current = distLow <= distHigh ? "low" : "high";
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-
     if (dragging.current === "low") onChange(Math.min(val, high - 100), high);
     else onChange(low, Math.max(val, low + 100));
   };
@@ -70,17 +88,64 @@ function DualRangeSlider({
 
   const onTrackPointerUp = () => { dragging.current = null; };
 
+  // Commit typed value on blur or Enter
+  const commitLow = (raw: string) => {
+    const v = parseInt(raw.replace(/[^0-9]/g, ''), 10);
+    if (!isNaN(v)) {
+      const clamped = Math.max(min, Math.min(v, high - 100));
+      onChange(clamped, high);
+      setLowStr(String(clamped));
+    } else {
+      setLowStr(String(low));
+    }
+  };
+
+  const commitHigh = (raw: string) => {
+    const v = parseInt(raw.replace(/[^0-9]/g, ''), 10);
+    if (!isNaN(v)) {
+      const clamped = Math.min(max, Math.max(v, low + 100));
+      onChange(low, clamped);
+      setHighStr(String(clamped));
+    } else {
+      setHighStr(String(high));
+    }
+  };
+
   return (
     <div className="px-1 pt-2 pb-1 select-none">
-      {/* Labels */}
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-          ₹{low.toLocaleString()}
-        </span>
+      {/* Editable price inputs row */}
+      <div className="flex justify-between items-center mb-3 gap-2">
+        {/* Min price input */}
+        <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1 focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+          <span className="text-xs font-semibold text-primary">₹</span>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={lowStr}
+            onChange={e => setLowStr(e.target.value)}
+            onBlur={e => commitLow(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && commitLow(lowStr)}
+            className="w-16 bg-transparent text-xs font-semibold text-primary outline-none border-none p-0 text-center"
+            aria-label="Minimum price"
+          />
+        </div>
+
         <span className="text-xs text-on-surface-variant font-medium">Price / day</span>
-        <span className="text-xs font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-          ₹{high.toLocaleString()}
-        </span>
+
+        {/* Max price input */}
+        <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1 focus-within:ring-2 focus-within:ring-primary/30 transition-all">
+          <span className="text-xs font-semibold text-primary">₹</span>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={highStr}
+            onChange={e => setHighStr(e.target.value)}
+            onBlur={e => commitHigh(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && commitHigh(highStr)}
+            className="w-16 bg-transparent text-xs font-semibold text-primary outline-none border-none p-0 text-center"
+            aria-label="Maximum price"
+          />
+        </div>
       </div>
 
       {/* Track */}
@@ -92,26 +157,21 @@ function DualRangeSlider({
         onPointerUp={onTrackPointerUp}
         onPointerCancel={onTrackPointerUp}
       >
-        {/* Background track */}
         <div className="absolute w-full h-1.5 rounded-full bg-surface-variant" />
-        {/* Active range */}
         <div
           className="absolute h-1.5 rounded-full bg-primary"
           style={{ left: `${pct(low)}%`, right: `${100 - pct(high)}%` }}
         />
-        {/* Low thumb */}
         <div
-          className="absolute w-5 h-5 rounded-full bg-primary border-2 border-white shadow-lg ring-2 ring-primary/20 transition-transform hover:scale-110 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
+          className="absolute w-5 h-5 rounded-full bg-primary border-2 border-white shadow-lg ring-2 ring-primary/20 hover:scale-110 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
           style={{ left: `${pct(low)}%` }}
         />
-        {/* High thumb */}
         <div
-          className="absolute w-5 h-5 rounded-full bg-primary border-2 border-white shadow-lg ring-2 ring-primary/20 transition-transform hover:scale-110 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
+          className="absolute w-5 h-5 rounded-full bg-primary border-2 border-white shadow-lg ring-2 ring-primary/20 hover:scale-110 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
           style={{ left: `${pct(high)}%` }}
         />
       </div>
 
-      {/* Min / Max labels */}
       <div className="flex justify-between mt-0.5">
         <span className="text-[10px] text-outline-variant">₹{min.toLocaleString()}</span>
         <span className="text-[10px] text-outline-variant">₹{max.toLocaleString()}</span>
@@ -120,17 +180,22 @@ function DualRangeSlider({
   );
 }
 
+
 // ── Multi-Select Dropdown ────────────────────────────────────────────────────
 function FilterDropdown({ label, options, selected, onChange }: {
   label: string; options: string[]; selected: string[];
   onChange: (v: string[]) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const h = (e: PointerEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const menu = document.querySelector('[data-ddmenu]');
+      if (!menu?.contains(e.target as Node) && !btnRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+      }
     };
     document.addEventListener("pointerdown", h);
     return () => document.removeEventListener("pointerdown", h);
@@ -139,12 +204,23 @@ function FilterDropdown({ label, options, selected, onChange }: {
   const toggle = (v: string) =>
     onChange(selected.includes(v) ? selected.filter(x => x !== v) : [...selected, v]);
 
+  const handleToggle = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    if (!open && btnRef.current) {
+      setPos(calcDropPos(btnRef.current, 200));
+    }
+    setOpen(o => !o);
+  };
+
   const isActive = selected.length > 0;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
-    <div className="relative flex-shrink-0" ref={ref}>
+    <div className="relative flex-shrink-0">
       <button
-        onPointerDown={e => { e.stopPropagation(); setOpen(o => !o); }}
+        ref={btnRef}
+        onPointerDown={handleToggle}
         className={`rounded-full px-4 py-2 text-sm flex items-center gap-2 transition-all border font-medium whitespace-nowrap ${
           isActive ? "bg-primary text-white border-primary shadow-md" : "bg-surface-container border-outline-variant/30 text-on-surface hover:bg-surface-variant"
         }`}
@@ -158,14 +234,17 @@ function FilterDropdown({ label, options, selected, onChange }: {
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
-      <AnimatePresence>
-        {open && (
+      {mounted && open && pos && createPortal(
+        <AnimatePresence>
           <motion.div
+            key="filter-menu"
+            data-ddmenu
             initial={{ opacity: 0, y: 6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.97 }}
-            transition={{ duration: 0.12 }}
-            className="absolute top-full left-0 mt-2 z-[60] glass-panel rounded-2xl shadow-2xl min-w-[170px] overflow-hidden"
+            transition={{ duration: 0.15 }}
+            style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 99999, minWidth: 200 }}
+            className="glass-panel rounded-2xl shadow-2xl overflow-hidden"
           >
             <div className="p-1.5 flex flex-col gap-0.5">
               {options.map(opt => (
@@ -190,8 +269,9 @@ function FilterDropdown({ label, options, selected, onChange }: {
               ))}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
@@ -199,8 +279,12 @@ function FilterDropdown({ label, options, selected, onChange }: {
 // ── Sort Dropdown ────────────────────────────────────────────────────────────
 function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: SortOption) => void }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const options: { label: string; value: SortOption }[] = [
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const sortOptions: { label: string; value: SortOption }[] = [
     { label: "Recommended", value: "default" },
     { label: "Price: Low → High", value: "price-asc" },
     { label: "Price: High → Low", value: "price-desc" },
@@ -209,19 +293,29 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
 
   useEffect(() => {
     const h = (e: PointerEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const menu = document.querySelector('[data-ddmenu]');
+      if (!menu?.contains(e.target as Node) && !btnRef.current?.contains(e.target as Node)) {
+        setOpen(false);
+      }
     };
     document.addEventListener("pointerdown", h);
     return () => document.removeEventListener("pointerdown", h);
   }, []);
 
-  const current = options.find(o => o.value === value)?.label ?? "Sort";
+  const handleToggle = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    if (!open && btnRef.current) setPos(calcDropPos(btnRef.current, 220));
+    setOpen(o => !o);
+  };
+
+  const current = sortOptions.find(o => o.value === value)?.label ?? "Recommended";
   const isActive = value !== "default";
 
   return (
-    <div className="relative flex-shrink-0" ref={ref}>
+    <div className="relative flex-shrink-0">
       <button
-        onPointerDown={e => { e.stopPropagation(); setOpen(o => !o); }}
+        ref={btnRef}
+        onPointerDown={handleToggle}
         className={`rounded-full px-4 py-2 text-sm flex items-center gap-2 transition-all border font-medium whitespace-nowrap ${
           isActive ? "bg-primary text-white border-primary shadow-md" : "bg-surface-container border-outline-variant/30 text-on-surface hover:bg-surface-variant"
         }`}
@@ -230,17 +324,20 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 
-      <AnimatePresence>
-        {open && (
+      {mounted && open && pos && createPortal(
+        <AnimatePresence>
           <motion.div
+            key="sort-menu"
+            data-ddmenu
             initial={{ opacity: 0, y: 6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.97 }}
-            transition={{ duration: 0.12 }}
-            className="absolute top-full right-0 mt-2 z-[60] glass-panel rounded-2xl shadow-2xl min-w-[200px] overflow-hidden"
+            transition={{ duration: 0.15 }}
+            style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 99999, minWidth: 220 }}
+            className="glass-panel rounded-2xl shadow-2xl overflow-hidden"
           >
             <div className="p-1.5 flex flex-col gap-0.5">
-              {options.map(opt => (
+              {sortOptions.map(opt => (
                 <button
                   key={opt.value}
                   onPointerDown={e => { e.stopPropagation(); onChange(opt.value); setOpen(false); }}
@@ -253,13 +350,15 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
               ))}
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
+
 export default function MarketplaceClient({ initialBillboards }: { initialBillboards: Billboard[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredPin, setHoveredPin] = useState<string | null>(null);
