@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MapPin, Phone, Mail } from "lucide-react";
 
 /* Inline social SVG icons (lucide-react removed brand icons) */
@@ -57,6 +60,13 @@ const cities = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  
+  // Hide footer on dashboard-like pages where we want a full screen layout
+  if (pathname?.startsWith('/marketplace')) {
+    return null;
+  }
+
   return (
     <footer
       className="border-t border-outline-variant/40"

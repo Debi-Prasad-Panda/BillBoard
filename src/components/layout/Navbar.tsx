@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -36,6 +37,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  
+  const pathname = usePathname();
+  const isMarketplace = pathname?.startsWith('/marketplace');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -47,7 +51,7 @@ export default function Navbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled ? "glass-nav shadow-sm" : "bg-transparent"
+        scrolled || isMarketplace ? "glass-nav shadow-sm" : "bg-transparent"
       )}
       role="banner"
     >
