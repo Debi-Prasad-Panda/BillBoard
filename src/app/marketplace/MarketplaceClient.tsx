@@ -7,14 +7,6 @@ import { Search, SlidersHorizontal, ChevronDown, X, Maximize, Flame, Eye, MapPin
 import { motion, AnimatePresence } from "framer-motion";
 import { Billboard } from "./page";
 
-<<<<<<< HEAD
-const DynamicMap = dynamic(() => import('./MapComponent'), { 
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-surface-container-high flex flex-col items-center justify-center gap-4">
-      <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      <p className="text-sm text-on-surface-variant font-medium">Loading map...</p>
-=======
 const DynamicMap = dynamic(() => import('./MapComponent'), {
   ssr: false,
   loading: () => (
@@ -23,10 +15,10 @@ const DynamicMap = dynamic(() => import('./MapComponent'), {
         <Image src="/images/premium_map_placeholder.png" alt="Loading Map" fill className="object-cover" />
       </div>
       <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin z-10" />
->>>>>>> cc92fe98c672ce1b5abc9c6bf143add62d35ff04
     </div>
   )
 });
+
 
 type SortOption = "default" | "price-asc" | "price-desc" | "impressions-desc";
 type Filters = {
@@ -324,37 +316,10 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
     setFilters(f => ({ ...f, [k]: v })), []);
 
   return (
-<<<<<<< HEAD
-    <div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 items-stretch">
-      {/* Interactive Map (Top on mobile, Left on desktop) */}
-      <section className="flex-none w-full h-[400px] lg:w-[60%] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0">
-        {/* Map fills the entire panel */}
-        <div className="absolute inset-0">
-          <DynamicMap 
-            billboards={initialBillboards} 
-            hoveredPin={hoveredPin} 
-            setHoveredPin={setHoveredPin} 
-            viewState={viewState} 
-            setViewState={setViewState} 
-          />
-        </div>
-
-        {/* Floating Search Overlay on Map (Desktop only) */}
-        <div className="hidden lg:flex absolute top-6 left-6 right-6 justify-center pointer-events-none z-10">
-          <div className="glass-panel rounded-full flex items-center px-6 py-4 shadow-lg ambient-shadow pointer-events-auto max-w-lg w-full">
-            <Search className="w-5 h-5 text-outline mr-3" aria-hidden="true" />
-            <input 
-              type="text"
-              placeholder="Search areas, landmarks..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-on-surface w-full font-body-md text-sm placeholder:text-outline-variant outline-none"
-              aria-label="Search map"
-=======
-    <div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 overflow-hidden">
+<div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 items-stretch overflow-hidden">
 
       {/* ── Map Panel ────────────────────────────────────────────────────── */}
-      <section className="hidden lg:flex flex-[0.6] h-full relative border-r border-outline-variant/30 bg-surface-container-high">
+      <section className="flex-none w-full h-[400px] lg:w-[60%] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0 bg-surface-container-high">
         <div className="relative w-full h-full z-0">
           <DynamicMap billboards={filteredBillboards} hoveredPin={hoveredPin}
             setHoveredPin={setHoveredPin} viewState={viewState} setViewState={setViewState} />
@@ -367,7 +332,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
             <input type="text" placeholder="Search areas, types, sizes..."
               value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               className="bg-transparent border-none focus:ring-0 text-on-surface w-full text-sm placeholder:text-outline-variant outline-none"
->>>>>>> cc92fe98c672ce1b5abc9c6bf143add62d35ff04
+
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery("")} className="ml-2 flex-shrink-0">
@@ -379,16 +344,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
             </button>
           </div>
         </div>
-<<<<<<< HEAD
-      </section>
-
-      {/* Listings Panel (Bottom on mobile, Right on desktop) */}
-      <section className="flex-1 lg:flex-none lg:w-[40%] bg-surface-bright flex flex-col overflow-hidden shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)] relative z-10">
-        
-        {/* Mobile Search/Filter Bar (visible only on small screens) */}
-=======
-
-        {/* Pin count */}
+{/* Pin count */}
         <div className="absolute bottom-6 left-6 z-20">
           <div className="glass-panel rounded-full px-4 py-2 flex items-center gap-2 shadow text-sm font-medium text-on-surface">
             <MapPin className="w-4 h-4 text-primary" />
@@ -401,7 +357,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
       <section className="flex-1 lg:flex-[0.4] h-full bg-surface-bright flex flex-col z-30 shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)]">
 
         {/* Mobile search */}
->>>>>>> cc92fe98c672ce1b5abc9c6bf143add62d35ff04
+
         <div className="lg:hidden p-4 border-b border-outline-variant/30 bg-surface-bright sticky top-0 z-20">
           <div className="glass-panel rounded-full flex items-center px-4 py-3 border border-outline-variant/40">
             <Search className="w-4 h-4 text-outline mr-2 flex-shrink-0" />
