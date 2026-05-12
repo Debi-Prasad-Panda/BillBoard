@@ -365,6 +365,39 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredPin, setHoveredPin] = useState<string | null>(null);
   const [viewState, setViewState] = useState({ longitude: 72.87, latitude: 19.06, zoom: 11 });
+  const [billboards, setBillboards] = useState(initialBillboards);
+
+  // Fetch real traffic data from OSM on mount
+  useEffect(() => {
+    const fetchTraffic = async () => {
+      try {
+        const locations = initialBillboards.map(b => ({ id: b.id, lat: b.lat, lng: b.lng }));
+        const res = await fetch("/api/traffic-estimate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ locations }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+
+        setBillboards(prev => prev.map(bb => {
+          const est = data[bb.id];
+          if (!est) return bb;
+          return {
+            ...bb,
+            trafficScore: est.trafficScore,
+            estimatedImpressions: est.estimatedDailyImpressions,
+            reachRadius: est.reachRadiusMeters,
+            nearestRoad: est.nearestRoad,
+            poiCount: est.breakdown?.nearbyPOIs?.reduce((s: number, p: { count: number }) => s + p.count, 0) || 0,
+          };
+        }));
+      } catch (err) {
+        console.warn("Traffic estimate fetch failed (non-critical):", err);
+      }
+    };
+    fetchTraffic();
+  }, [initialBillboards]);
 
   const minPriceInData = useMemo(() => Math.min(...initialBillboards.map(b => b.price)), [initialBillboards]);
   const maxPriceInData = useMemo(() => Math.max(...initialBillboards.map(b => b.price)), [initialBillboards]);
@@ -380,9 +413,9 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
   const facings = useMemo(() => [...new Set(initialBillboards.map(b => b.facing))].sort(), [initialBillboards]);
   const availabilities = useMemo(() => [...new Set(initialBillboards.map(b => b.available))].sort(), [initialBillboards]);
 
-  // Filtering + sorting
+  // Filtering + sorting — use enriched billboards
   const filteredBillboards = useMemo(() => {
-    let list = initialBillboards.filter(bb => {
+    let list = billboards.filter(bb => {
       const q = searchQuery.toLowerCase();
       if (q && !bb.title.toLowerCase().includes(q) && !bb.type.toLowerCase().includes(q) &&
           !bb.size.toLowerCase().includes(q) && !bb.facing.toLowerCase().includes(q)) return false;
@@ -399,7 +432,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
     else if (filters.sortBy === "impressions-desc") list = [...list].sort((a, b) => b.impressions - a.impressions);
 
     return list;
-  }, [initialBillboards, searchQuery, filters]);
+  }, [billboards, searchQuery, filters]);
 
   const activeFilterCount =
     filters.sizes.length + filters.types.length + filters.facing.length +
@@ -415,14 +448,155 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
   const set = useCallback(<K extends keyof Filters>(k: K, v: Filters[K]) =>
     setFilters(f => ({ ...f, [k]: v })), []);
 
+  /* ── Booking Modal State ─────────────────────────────── */
+  const [bookingBillboard, setBookingBillboard] = useState<Billboard | null>(null);
+  const [bookingForm, setBookingForm] = useState({ name: "", email: "", phone: "", company: "", startDate: "", duration: 7, requirements: "" });
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState<{ id: string; estimatedTotal: number } | null>(null);
+  const [bookingErrors, setBookingErrors] = useState<string[]>([]);
+
+  const handleBookNow = useCallback((billboardId: string) => {
+    const bb = billboards.find(b => b.id === billboardId);
+    if (bb) {
+      setBookingBillboard(bb);
+      setBookingSuccess(null);
+      setBookingErrors([]);
+    }
+  }, [billboards]);
+
+  const submitBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!bookingBillboard) return;
+    setBookingLoading(true);
+    setBookingErrors([]);
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...bookingForm, billboardId: bookingBillboard.id }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setBookingSuccess({ id: data.booking.id, estimatedTotal: data.booking.estimatedTotal });
+      } else {
+        setBookingErrors(data.errors || ["Something went wrong."]);
+      }
+    } catch {
+      setBookingErrors(["Network error. Please try again."]);
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
   return (
 <div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 items-stretch overflow-hidden">
+
+      {/* ── Booking Modal ─────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {bookingBillboard && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+            onClick={() => setBookingBillboard(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="surface-card w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 rounded-2xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {bookingSuccess ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-on-surface mb-2">Booking Inquiry Submitted!</h3>
+                  <p className="text-on-surface-variant mb-1">Reference: <span className="font-mono font-bold text-primary">{bookingSuccess.id}</span></p>
+                  <p className="text-on-surface-variant mb-4">Estimated Total: <span className="font-bold text-on-surface">₹{bookingSuccess.estimatedTotal.toLocaleString("en-IN")}</span></p>
+                  <p className="text-sm text-on-surface-variant mb-6">Our concierge team will contact you within 2 hours.</p>
+                  <button onClick={() => { setBookingBillboard(null); setBookingForm({ name: "", email: "", phone: "", company: "", startDate: "", duration: 7, requirements: "" }); }} className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all">Done</button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <h3 className="text-lg font-bold text-on-surface">Book Billboard</h3>
+                      <p className="text-sm text-on-surface-variant">{bookingBillboard.title}</p>
+                    </div>
+                    <button onClick={() => setBookingBillboard(null)} className="w-8 h-8 rounded-full bg-surface-variant/50 flex items-center justify-center hover:bg-surface-variant transition-colors">
+                      <X className="w-4 h-4 text-on-surface-variant" />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-surface-container mb-5">
+                    <div className="text-2xl font-bold text-primary">₹{bookingBillboard.price.toLocaleString("en-IN")}</div>
+                    <span className="text-sm text-on-surface-variant">/day</span>
+                    <span className="ml-auto text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-semibold">{bookingBillboard.type}</span>
+                  </div>
+
+                  {bookingErrors.length > 0 && (
+                    <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 mb-4">
+                      {bookingErrors.map((err, i) => <p key={i} className="text-sm text-red-600 dark:text-red-400">{err}</p>)}
+                    </div>
+                  )}
+
+                  <form onSubmit={submitBooking} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1">Full Name *</label>
+                        <input required value={bookingForm.name} onChange={e => setBookingForm(f => ({ ...f, name: e.target.value }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Your name" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1">Company</label>
+                        <input value={bookingForm.company} onChange={e => setBookingForm(f => ({ ...f, company: e.target.value }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="Optional" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1">Email *</label>
+                        <input required type="email" value={bookingForm.email} onChange={e => setBookingForm(f => ({ ...f, email: e.target.value }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="you@company.com" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1">Phone *</label>
+                        <input required type="tel" value={bookingForm.phone} onChange={e => setBookingForm(f => ({ ...f, phone: e.target.value }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" placeholder="+91 98765 43210" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1">Start Date *</label>
+                        <input required type="date" value={bookingForm.startDate} onChange={e => setBookingForm(f => ({ ...f, startDate: e.target.value }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" min={new Date().toISOString().split("T")[0]} />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-on-surface-variant block mb-1">Duration (days) *</label>
+                        <input required type="number" min={1} max={365} value={bookingForm.duration} onChange={e => setBookingForm(f => ({ ...f, duration: parseInt(e.target.value) || 7 }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-on-surface-variant block mb-1">Requirements</label>
+                      <textarea rows={3} value={bookingForm.requirements} onChange={e => setBookingForm(f => ({ ...f, requirements: e.target.value }))} className="w-full px-3 py-2 rounded-lg bg-surface-container text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none" placeholder="Special requirements, creative specs, etc." />
+                    </div>
+                    <div className="flex items-center justify-between pt-2">
+                      <div>
+                        <p className="text-xs text-on-surface-variant">Estimated Total</p>
+                        <p className="text-lg font-bold text-on-surface">₹{(bookingBillboard.price * bookingForm.duration).toLocaleString("en-IN")}</p>
+                      </div>
+                      <button type="submit" disabled={bookingLoading} className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition-all disabled:opacity-60 flex items-center gap-2">
+                        {bookingLoading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Submitting...</> : "Submit Inquiry"}
+                      </button>
+                    </div>
+                  </form>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Map Panel ────────────────────────────────────────────────────── */}
       <section className="flex-none w-full h-[400px] lg:w-[60%] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0 bg-surface-container-high">
         <div className="relative w-full h-full z-0">
           <DynamicMap billboards={filteredBillboards} hoveredPin={hoveredPin}
-            setHoveredPin={setHoveredPin} viewState={viewState} setViewState={setViewState} />
+            setHoveredPin={setHoveredPin} viewState={viewState} setViewState={setViewState}
+            onBookNow={handleBookNow} />
         </div>
 
         {/* Search overlay */}
