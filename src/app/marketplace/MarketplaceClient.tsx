@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Search, SlidersHorizontal, ChevronDown, X, Maximize, Flame, Eye, MapPin, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -531,7 +532,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
                 {filteredBillboards.map(bb => {
                   const isNow = bb.available === "Available Now";
                   return (
-                    <article key={bb.id}
+                    <Link href={`/marketplace/${bb.id}`} key={bb.id}
                       className={`glass-panel rounded-2xl overflow-hidden flex flex-col group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 ${
                         hoveredPin === bb.id ? "ring-2 ring-primary shadow-xl -translate-y-0.5" : ""
                       }`}
@@ -584,11 +585,11 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
                           <button className={`px-4 py-2 rounded-full text-sm font-semibold transition-all active:scale-95 ${
                             isNow ? "bg-primary text-white hover:bg-primary/90 shadow-md" : "glass-button-secondary"
                           }`}>
-                            {isNow ? "Book Now" : "View Details"}
+                            {isNow ? "View Analytics" : "View Details"}
                           </button>
                         </div>
                       </div>
-                    </article>
+                    </Link>
                   );
                 })}
               </motion.div>
