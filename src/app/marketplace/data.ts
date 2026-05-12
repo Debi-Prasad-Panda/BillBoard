@@ -33,6 +33,7 @@ export type Billboard = {
   reachRadius?: number;
   nearestRoad?: string;
   poiCount?: number;
+  area?: string;
 };
 
 const IMG_A = "https://lh3.googleusercontent.com/aida-public/AB6AXuClrIlKUzUApEcejLdaZWiZdlTq8tJEcf-mzwJ1Exa6szUvbvAhQi-T3wBTxjomngmizDz5KuHqZFI0oEeCAw3JwWvTO99JFr_4Bq0WGeUKVq44h6GRs5WiTEJ5fzgFBDJJurCj1uwd-oWS4wvlNkZyetb6ch1Cjp_HmKcHilaKqetC_9JTr_K5zWafGafyFOThtCIzDHFcyI_q6Wcbu2Qlp-qzXLIwXooCuXnvBI8rY90W4s9okCgbnDInVYlWBcAlDOMjIBEz_g";
@@ -157,6 +158,20 @@ export const BILLBOARDS: Billboard[] = [
     demographics: { twoWheeler: 35, car: 38, bus: 20, pedestrian: 7, incomeZone: "Mid-High" },
     weatherScore: 68, proofImages: [IMG_B, IMG_A],
     bookedDates: ["2025-05-13","2025-05-14"],
+  },
+  {
+    id: "bb-9", title: "BKC Signature LED MegaBoard", size: "50x100", type: "LED",
+    facing: "East", impressions: 260000, price: 12500, image: IMG_A,
+    available: "Available Now", lat: 19.064, lng: 72.8661, availability: "available",
+    location: "BKC, Mumbai",
+    vendor: { name: "SkySign India", rating: 4.9, totalListings: 22, verified: true, since: "2018", responseTime: "< 30 min" },
+    scores: { visibility: 99, readability: 95, dwellTime: 97, illumination: 100, angle: 98 },
+    traffic: { hourly: makeHourly(19, 9000), weekdayAvg: 260000, weekendAvg: 200000, peakHour: "7 PM – 9 PM" },
+    campaigns: { totalRuns: 180, avgDuration: 30, renewalRate: 93, topBrands: ["Rolex", "Audi", "Samsung", "Apple"], avgCTR: 4.6 },
+    market: { rank: 1, totalInArea: 30, percentile: 99, priceVsAvg: 55 },
+    demographics: { twoWheeler: 8, car: 70, bus: 12, pedestrian: 10, incomeZone: "Ultra Premium" },
+    weatherScore: 96, proofImages: [IMG_A, IMG_B, IMG_A],
+    bookedDates: ["2025-06-25","2025-06-26","2025-06-27"],
   },
 ];
 

@@ -191,17 +191,17 @@ function FilterDropdown({ label, options, selected, onChange }: {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const h = (e: PointerEvent) => {
-      const menu = document.querySelector('[data-ddmenu]');
-      if (!menu?.contains(e.target as Node) && !btnRef.current?.contains(e.target as Node)) {
+      if (open && !menuRef.current?.contains(e.target as Node) && !btnRef.current?.contains(e.target as Node)) {
         setOpen(false);
       }
     };
     document.addEventListener("pointerdown", h);
     return () => document.removeEventListener("pointerdown", h);
-  }, []);
+  }, [open]);
 
   const toggle = (v: string) =>
     onChange(selected.includes(v) ? selected.filter(x => x !== v) : [...selected, v]);
@@ -240,6 +240,7 @@ function FilterDropdown({ label, options, selected, onChange }: {
         <AnimatePresence>
           <motion.div
             key="filter-menu"
+            ref={menuRef}
             data-ddmenu
             initial={{ opacity: 0, y: 6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -293,16 +294,17 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
     { label: "Most Impressions", value: "impressions-desc" },
   ];
 
+  const menuRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const h = (e: PointerEvent) => {
-      const menu = document.querySelector('[data-ddmenu]');
-      if (!menu?.contains(e.target as Node) && !btnRef.current?.contains(e.target as Node)) {
+      if (open && !menuRef.current?.contains(e.target as Node) && !btnRef.current?.contains(e.target as Node)) {
         setOpen(false);
       }
     };
     document.addEventListener("pointerdown", h);
     return () => document.removeEventListener("pointerdown", h);
-  }, []);
+  }, [open]);
 
   const handleToggle = (e: React.PointerEvent) => {
     e.stopPropagation();
@@ -330,6 +332,7 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
         <AnimatePresence>
           <motion.div
             key="sort-menu"
+            ref={menuRef}
             data-ddmenu
             initial={{ opacity: 0, y: 6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -364,7 +367,7 @@ function SortDropdown({ value, onChange }: { value: SortOption; onChange: (v: So
 export default function MarketplaceClient({ initialBillboards }: { initialBillboards: Billboard[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [hoveredPin, setHoveredPin] = useState<string | null>(null);
-  const [viewState, setViewState] = useState({ longitude: 72.87, latitude: 19.06, zoom: 11 });
+  const [viewState, setViewState] = useState({ longitude: 72.87, latitude: 19.06, zoom: 12 });
   const [billboards, setBillboards] = useState(initialBillboards);
 
   // Fetch real billboard locations from OpenStreetMap on mount
@@ -465,26 +468,50 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
     return () => clearTimeout(timer);
   }, [billboards.length]); // Re-run when billboard count changes (real ones added)
 
-  const minPriceInData = useMemo(() => Math.min(...initialBillboards.map(b => b.price)), [initialBillboards]);
-  const maxPriceInData = useMemo(() => Math.max(...initialBillboards.map(b => b.price)), [initialBillboards]);
+  const minPriceInData = useMemo(() => Math.min(...billboards.map(b => b.price)), [billboards]);
+  const maxPriceInData = useMemo(() => Math.max(...billboards.map(b => b.price)), [billboards]);
 
   const [filters, setFilters] = useState<Filters>({
     sizes: [], types: [], facing: [], availability: [],
     minPrice: minPriceInData, maxPrice: maxPriceInData, sortBy: "default",
   });
 
-  // Derived options
-  const sizes = useMemo(() => [...new Set(initialBillboards.map(b => b.size))].sort(), [initialBillboards]);
-  const types = useMemo(() => [...new Set(initialBillboards.map(b => b.type))].sort(), [initialBillboards]);
-  const facings = useMemo(() => [...new Set(initialBillboards.map(b => b.facing))].sort(), [initialBillboards]);
-  const availabilities = useMemo(() => [...new Set(initialBillboards.map(b => b.available))].sort(), [initialBillboards]);
+  // Keep track of the absolute min/max we've seen to properly expand the slider
+  // when new data loads without crushing user's custom filter selections
+  const prevBounds = useRef({ min: minPriceInData, max: maxPriceInData });
+  useEffect(() => {
+    setFilters(f => {
+      let newMin = f.minPrice;
+      let newMax = f.maxPrice;
+      // If the filter was at the old absolute boundary (or the hardcoded 0/99999), expand it to the new boundary
+      if (f.minPrice === prevBounds.current.min || f.minPrice === 0) newMin = minPriceInData;
+      if (f.maxPrice === prevBounds.current.max || f.maxPrice === 99999) newMax = maxPriceInData;
+      
+      // Ensure the current filter is within the new absolute bounds
+      return { 
+        ...f, 
+        minPrice: Math.max(minPriceInData, Math.min(newMin, maxPriceInData)), 
+        maxPrice: Math.min(maxPriceInData, Math.max(newMax, minPriceInData)) 
+      };
+    });
+    prevBounds.current = { min: minPriceInData, max: maxPriceInData };
+  }, [minPriceInData, maxPriceInData]);
+
+  // Derived options from ALL billboards (including real ones)
+  const sizes = useMemo(() => [...new Set(billboards.map(b => b.size))].sort(), [billboards]);
+  const types = useMemo(() => [...new Set(billboards.map(b => b.type))].sort(), [billboards]);
+  const facings = useMemo(() => [...new Set(billboards.map(b => b.facing))].sort(), [billboards]);
+  const availabilities = useMemo(() => [...new Set(billboards.map(b => b.available))].sort(), [billboards]);
 
   // Filtering + sorting — use enriched billboards
   const filteredBillboards = useMemo(() => {
     let list = billboards.filter(bb => {
       const q = searchQuery.toLowerCase();
       if (q && !bb.title.toLowerCase().includes(q) && !bb.type.toLowerCase().includes(q) &&
-          !bb.size.toLowerCase().includes(q) && !bb.facing.toLowerCase().includes(q)) return false;
+          !bb.size.toLowerCase().includes(q) && !bb.facing.toLowerCase().includes(q) &&
+          !(bb.nearestRoad && bb.nearestRoad.toLowerCase().includes(q)) &&
+          !(bb.area && bb.area.toLowerCase().includes(q)) &&
+          !(bb.location && bb.location.toLowerCase().includes(q))) return false;
       if (filters.sizes.length && !filters.sizes.includes(bb.size)) return false;
       if (filters.types.length && !filters.types.includes(bb.type)) return false;
       if (filters.facing.length && !filters.facing.includes(bb.facing)) return false;
@@ -495,7 +522,13 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
 
     if (filters.sortBy === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     else if (filters.sortBy === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
-    else if (filters.sortBy === "impressions-desc") list = [...list].sort((a, b) => b.impressions - a.impressions);
+    else if (filters.sortBy === "impressions-desc") {
+      list = [...list].sort((a, b) => {
+        const impA = a.estimatedImpressions || a.impressions || 0;
+        const impB = b.estimatedImpressions || b.impressions || 0;
+        return impB - impA;
+      });
+    }
 
     return list;
   }, [billboards, searchQuery, filters]);
@@ -555,7 +588,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
   };
 
   return (
-<div className="flex-1 flex flex-col lg:flex-row w-full h-[calc(100vh-64px)] min-h-[600px] relative mt-16 items-stretch overflow-hidden">
+    <div className="flex-1 flex flex-col lg:flex-row w-full lg:h-[calc(100dvh-64px)] min-h-[calc(100dvh-64px)] relative mt-16 overflow-hidden">
 
       {/* ── Booking Modal ─────────────────────────────────────────────── */}
       <AnimatePresence>
@@ -658,7 +691,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
       </AnimatePresence>
 
       {/* ── Map Panel ────────────────────────────────────────────────────── */}
-      <section className="flex-none w-full h-[400px] lg:w-[60%] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0 bg-surface-container-high">
+      <section className="flex-none w-full h-[400px] lg:flex-[0.6] lg:h-auto relative border-b lg:border-b-0 lg:border-r border-outline-variant/30 z-0 bg-surface-container-high">
         <div className="relative w-full h-full z-0">
           <DynamicMap billboards={filteredBillboards} hoveredPin={hoveredPin}
             setHoveredPin={setHoveredPin} viewState={viewState} setViewState={setViewState}
@@ -694,7 +727,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
       </section>
 
       {/* ── Listings Panel ────────────────────────────────────────────────── */}
-      <section className="flex-1 lg:flex-[0.4] h-full bg-surface-bright flex flex-col z-30 shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)]">
+      <section className="flex-1 lg:flex-[0.4] min-w-0 h-full bg-surface-bright flex flex-col z-30 shadow-[-20px_0_40px_-10px_rgba(0,0,0,0.05)]">
 
         {/* Mobile search */}
 
@@ -713,7 +746,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
         <div className="p-4 lg:px-5 lg:pt-5 lg:pb-3 border-b border-outline-variant/30 bg-surface-bright/95 backdrop-blur-md sticky top-[64px] lg:top-0 z-40">
 
           {/* Filter chips row */}
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide items-center">
+          <div className="flex gap-2 flex-wrap lg:flex-nowrap lg:overflow-x-auto pb-1 scrollbar-hide items-center">
             <FilterDropdown label="Size" options={sizes} selected={filters.sizes} onChange={v => set("sizes", v)} />
             <FilterDropdown label="Type" options={types} selected={filters.types} onChange={v => set("types", v)} />
             <FilterDropdown label="Facing" options={facings} selected={filters.facing} onChange={v => set("facing", v)} />
@@ -740,7 +773,7 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
           {/* Result count */}
           <div className="mt-2.5 flex items-center gap-2 text-sm text-on-surface-variant">
             Showing <span className="text-on-surface font-bold">{filteredBillboards.length}</span>
-            {" "}of <span className="font-medium">{initialBillboards.length}</span> billboards
+            {" "}of <span className="font-medium">{billboards.length}</span> billboards
             {activeFilterCount > 0 && (
               <span className="ml-auto text-[11px] bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-semibold">
                 {activeFilterCount} active
@@ -771,6 +804,10 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
               <motion.div key="list" className="flex flex-col gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {filteredBillboards.map(bb => {
                   const isNow = bb.available === "Available Now";
+                  const displayImpressions = bb.estimatedImpressions || bb.impressions;
+                  const displayImpressionsLabel = displayImpressions >= 1000
+                    ? `${(displayImpressions / 1000).toFixed(0)}k`
+                    : String(displayImpressions);
                   return (
                     <Link href={`/marketplace/${bb.id}`} key={bb.id}
                       className={`glass-panel rounded-2xl overflow-hidden flex flex-col group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 ${
@@ -810,12 +847,27 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
 
                         <div className="bg-surface-container-lowest rounded-xl px-3 py-2.5 border border-outline-variant/20 flex items-center gap-2.5">
                           <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
-                            {bb.impressions >= 100000 ? <Flame className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            {displayImpressions >= 100000 ? <Flame className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                           </div>
                           <p className="text-sm text-on-surface">
-                            <span className="font-semibold">~{bb.impressions >= 1000 ? `${(bb.impressions / 1000).toFixed(0)}k` : bb.impressions}</span> daily impressions
+                            <span className="font-semibold">~{displayImpressionsLabel}</span> daily impressions
                           </p>
                         </div>
+
+                        {(bb.trafficScore !== undefined || bb.nearestRoad) && (
+                          <div className="flex items-center gap-2 text-[11px] text-on-surface-variant">
+                            {bb.trafficScore !== undefined && (
+                              <span className={`px-2 py-0.5 rounded-full font-semibold ${bb.trafficScore >= 70 ? "bg-green-500/10 text-green-600" : bb.trafficScore >= 40 ? "bg-amber-500/10 text-amber-700" : "bg-red-500/10 text-red-600"}`}>
+                                Traffic {bb.trafficScore}
+                              </span>
+                            )}
+                            {bb.nearestRoad && (
+                              <span className="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">
+                                {bb.nearestRoad.replace(/_/g, " ")}
+                              </span>
+                            )}
+                          </div>
+                        )}
 
                         <div className="flex items-center justify-between pt-2 border-t border-outline-variant/20">
                           <div>

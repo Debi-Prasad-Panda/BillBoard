@@ -12,11 +12,11 @@ const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
 const OVERPASS_HEADERS = {
   "Content-Type": "application/x-www-form-urlencoded",
   "User-Agent": "AdSpace-OOH-Marketplace/1.0",
-  "Accept": "application/json",
+  Accept: "application/json",
 };
 
 /* ── Mumbai bounding box ────────────────────────────────── */
-const MUMBAI_BBOX = { south: 18.85, west: 72.75, north: 19.30, east: 73.05 };
+const MUMBAI_BBOX = { south: 18.85, west: 72.75, north: 19.3, east: 73.05 };
 
 type RawOSMBillboard = {
   id: number;
@@ -48,34 +48,57 @@ export type RealBillboard = {
  * Reverse geocode a coordinate to get the nearest road and area name.
  * Tries zoom 17, then 16, then falls back to an Overpass road query.
  */
-async function reverseGeocode(lat: number, lng: number): Promise<{ road: string; area: string }> {
+async function reverseGeocode(
+  lat: number,
+  lng: number,
+): Promise<{ road: string; area: string }> {
   // Try Nominatim at different zoom levels
   for (const zoom of [17, 16, 14]) {
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&zoom=${zoom}&addressdetails=1`,
-        { headers: { "User-Agent": "AdSpace-OOH-Marketplace/1.0", "Accept": "application/json" } }
+        {
+          headers: {
+            "User-Agent": "AdSpace-OOH-Marketplace/1.0",
+            Accept: "application/json",
+          },
+        },
       );
       if (!res.ok) continue;
       const data = await res.json();
       const addr = data.address || {};
       const road = addr.road || addr.pedestrian || addr.highway || "";
-      const area = addr.suburb || addr.neighbourhood || addr.city_district || addr.city || "Mumbai";
+      const area =
+        addr.suburb ||
+        addr.neighbourhood ||
+        addr.city_district ||
+        addr.city ||
+        "Mumbai";
       if (road) return { road, area };
       // Got area but no road, keep trying
-      if (zoom === 14) return { road: await fetchNearestRoadName(lat, lng) || area + " Road", area };
+      if (zoom === 14)
+        return {
+          road: (await fetchNearestRoadName(lat, lng)) || area + " Road",
+          area,
+        };
     } catch {
       continue;
     }
   }
 
-  return { road: await fetchNearestRoadName(lat, lng) || "Billboard Location", area: "Mumbai" };
+  return {
+    road: (await fetchNearestRoadName(lat, lng)) || "Billboard Location",
+    area: "Mumbai",
+  };
 }
 
 /**
  * Fallback: query Overpass for the nearest named highway within 200m.
  */
-async function fetchNearestRoadName(lat: number, lng: number): Promise<string | null> {
+async function fetchNearestRoadName(
+  lat: number,
+  lng: number,
+): Promise<string | null> {
   try {
     const query = `[out:json][timeout:10];way(around:200,${lat},${lng})["highway"]["name"];out tags 1;`;
     const res = await fetch(OVERPASS_URL, {
@@ -94,7 +117,9 @@ async function fetchNearestRoadName(lat: number, lng: number): Promise<string | 
 /**
  * Determine billboard type from OSM tags.
  */
-function inferType(tags: Record<string, string>): "Static" | "LED" | "Digital" | "Unipole" {
+function inferType(
+  tags: Record<string, string>,
+): "Static" | "LED" | "Digital" | "Unipole" {
   if (tags.lit === "yes" || tags.luminous === "yes") return "LED";
   if (tags.electronic === "yes" || tags.animated === "yes") return "Digital";
   return "Static";
@@ -105,7 +130,8 @@ function inferType(tags: Record<string, string>): "Static" | "LED" | "Digital" |
  */
 function inferFacing(tags: Record<string, string>): string {
   const dir = parseFloat(tags.direction || "");
-  if (isNaN(dir)) return ["North", "South", "East", "West"][Math.floor(Math.random() * 4)];
+  if (isNaN(dir))
+    return ["North", "South", "East", "West"][Math.floor(Math.random() * 4)];
   if (dir >= 315 || dir < 45) return "North";
   if (dir >= 45 && dir < 135) return "East";
   if (dir >= 135 && dir < 225) return "South";
@@ -116,12 +142,24 @@ function inferFacing(tags: Record<string, string>): string {
  * Estimate realistic price per day based on area and type.
  */
 function estimatePrice(type: string, area: string): number {
-  const areaMultiplier = /nariman|bandra|juhu|colaba|fort|marine/i.test(area) ? 2.5
-    : /andheri|powai|goregaon|dadar|worli/i.test(area) ? 1.8
-    : /thane|mulund|bhandup|ghatkopar/i.test(area) ? 1.2
-    : 1.0;
-  const basePrice = type === "LED" ? 2500 : type === "Digital" ? 2000 : type === "Unipole" ? 1800 : 800;
-  return Math.round(basePrice * areaMultiplier / 50) * 50; // Round to nearest 50
+  const areaMultiplier = /nariman|bandra|juhu|colaba|fort|marine|bkc/i.test(
+    area,
+  )
+    ? 3.2
+    : /andheri|powai|goregaon|dadar|worli/i.test(area)
+      ? 1.8
+      : /thane|mulund|bhandup|ghatkopar/i.test(area)
+        ? 1.2
+        : 1.0;
+  const basePrice =
+    type === "LED"
+      ? 3200
+      : type === "Digital"
+        ? 2600
+        : type === "Unipole"
+          ? 2200
+          : 1000;
+  return Math.round((basePrice * areaMultiplier) / 50) * 50; // Round to nearest 50
 }
 
 // Billboard images — using generic street-level imagery
@@ -155,23 +193,26 @@ export async function fetchRealBillboards(): Promise<RealBillboard[]> {
   if (!res.ok) throw new Error(`Overpass HTTP ${res.status}`);
   const data = await res.json();
 
-  const elements: RawOSMBillboard[] = (data.elements || []).map(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (el: any) => ({
-      id: el.id,
-      lat: el.lat ?? el.center?.lat,
-      lon: el.lon ?? el.center?.lon,
-      tags: el.tags || {},
-    })
-  ).filter((el: RawOSMBillboard) => el.lat && el.lon);
+  const elements: RawOSMBillboard[] = (data.elements || [])
+    .map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (el: any) => ({
+        id: el.id,
+        lat: el.lat ?? el.center?.lat,
+        lon: el.lon ?? el.center?.lon,
+        tags: el.tags || {},
+      }),
+    )
+    .filter((el: RawOSMBillboard) => el.lat && el.lon);
 
   // Deduplicate billboards that are very close together (< 50m apart)
   // Keep only one per cluster to avoid map clutter
   const deduplicated: RawOSMBillboard[] = [];
   for (const el of elements) {
-    const tooClose = deduplicated.some(existing => {
+    const tooClose = deduplicated.some((existing) => {
       const dlat = (el.lat - existing.lat) * 111320;
-      const dlng = (el.lon - existing.lon) * 111320 * Math.cos(el.lat * Math.PI / 180);
+      const dlng =
+        (el.lon - existing.lon) * 111320 * Math.cos((el.lat * Math.PI) / 180);
       return Math.sqrt(dlat * dlat + dlng * dlng) < 50;
     });
     if (!tooClose) deduplicated.push(el);
@@ -208,7 +249,7 @@ export async function fetchRealBillboards(): Promise<RealBillboard[]> {
 
     // Nominatim rate limit: max 1 request per second
     if (i < deduplicated.length - 1) {
-      await new Promise(r => setTimeout(r, 1100));
+      await new Promise((r) => setTimeout(r, 1100));
     }
   }
 

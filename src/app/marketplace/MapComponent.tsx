@@ -10,7 +10,11 @@ type MapComponentProps = {
   hoveredPin: string | null;
   setHoveredPin: (id: string | null) => void;
   viewState: { longitude: number; latitude: number; zoom: number };
-  setViewState: (vs: { longitude: number; latitude: number; zoom: number }) => void;
+  setViewState: (vs: {
+    longitude: number;
+    latitude: number;
+    zoom: number;
+  }) => void;
   onBookNow?: (billboardId: string) => void;
 };
 
@@ -27,15 +31,38 @@ const TILES = {
 };
 
 /* ─── Billboard type → color mapping ─────────────────────── */
-const TYPE_COLORS: Record<string, { bg: string; glow: string; ring: string }> = {
-  LED:     { bg: "#8b5cf6", glow: "rgba(139,92,246,0.4)",  ring: "rgba(139,92,246,0.25)" },
-  Digital: { bg: "#3b82f6", glow: "rgba(59,130,246,0.4)",  ring: "rgba(59,130,246,0.25)" },
-  Static:  { bg: "#10b981", glow: "rgba(16,185,129,0.4)",  ring: "rgba(16,185,129,0.25)" },
-  Unipole: { bg: "#f59e0b", glow: "rgba(245,158,11,0.4)",  ring: "rgba(245,158,11,0.25)" },
-};
+const TYPE_COLORS: Record<string, { bg: string; glow: string; ring: string }> =
+  {
+    LED: {
+      bg: "#8b5cf6",
+      glow: "rgba(139,92,246,0.4)",
+      ring: "rgba(139,92,246,0.25)",
+    },
+    Digital: {
+      bg: "#3b82f6",
+      glow: "rgba(59,130,246,0.4)",
+      ring: "rgba(59,130,246,0.25)",
+    },
+    Static: {
+      bg: "#10b981",
+      glow: "rgba(16,185,129,0.4)",
+      ring: "rgba(16,185,129,0.25)",
+    },
+    Unipole: {
+      bg: "#f59e0b",
+      glow: "rgba(245,158,11,0.4)",
+      ring: "rgba(245,158,11,0.25)",
+    },
+  };
 
 function getTypeColor(type: string) {
-  return TYPE_COLORS[type] || { bg: "#6366f1", glow: "rgba(99,102,241,0.4)", ring: "rgba(99,102,241,0.25)" };
+  return (
+    TYPE_COLORS[type] || {
+      bg: "#6366f1",
+      glow: "rgba(99,102,241,0.4)",
+      ring: "rgba(99,102,241,0.25)",
+    }
+  );
 }
 
 /* ─── Format price as compact string ────────────────────── */
@@ -167,25 +194,29 @@ function createPopupContent(bb: Billboard) {
     : '<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:0.4px;">UPCOMING</span>';
 
   const impSource = bb.estimatedImpressions || bb.impressions;
-  const impStr = impSource >= 1000 ? `${(impSource / 1000).toFixed(0)}k` : String(impSource);
+  const impStr =
+    impSource >= 1000 ? `${(impSource / 1000).toFixed(0)}k` : String(impSource);
   const isOSM = !!bb.estimatedImpressions;
 
   // Traffic score bar (shows loading state until OSM data arrives)
-  const trafficBar = bb.trafficScore != null ? `
+  const trafficBar =
+    bb.trafficScore != null
+      ? `
     <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
         <span style="font-size:10px;color:#6b7280;font-weight:600;">Traffic Score</span>
-        <span style="font-size:10px;font-weight:700;color:${bb.trafficScore >= 70 ? '#059669' : bb.trafficScore >= 40 ? '#d97706' : '#ef4444'};">${bb.trafficScore}/100</span>
+        <span style="font-size:10px;font-weight:700;color:${bb.trafficScore >= 70 ? "#059669" : bb.trafficScore >= 40 ? "#d97706" : "#ef4444"};">${bb.trafficScore}/100</span>
       </div>
       <div style="height:4px;background:#f1f5f9;border-radius:99px;overflow:hidden;">
-        <div style="height:100%;width:${bb.trafficScore}%;background:linear-gradient(90deg,${bb.trafficScore >= 70 ? '#10b981' : bb.trafficScore >= 40 ? '#f59e0b' : '#ef4444'},${tc.bg});border-radius:99px;"></div>
+        <div style="height:100%;width:${bb.trafficScore}%;background:linear-gradient(90deg,${bb.trafficScore >= 70 ? "#10b981" : bb.trafficScore >= 40 ? "#f59e0b" : "#ef4444"},${tc.bg});border-radius:99px;"></div>
       </div>
       <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
-        ${bb.nearestRoad ? `<span style="background:#eff6ff;color:#1d4ed8;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;">📍 ${bb.nearestRoad.replace(/_/g, ' ')}</span>` : ''}
-        ${bb.poiCount ? `<span style="background:#fdf2f8;color:#be185d;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;">🏪 ${bb.poiCount} POIs nearby</span>` : ''}
+        ${bb.nearestRoad ? `<span style="background:#eff6ff;color:#1d4ed8;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;">📍 ${bb.nearestRoad.replace(/_/g, " ")}</span>` : ""}
+        ${bb.poiCount ? `<span style="background:#fdf2f8;color:#be185d;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;">🏪 ${bb.poiCount} POIs nearby</span>` : ""}
       </div>
     </div>
-  ` : `
+  `
+      : `
     <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
       <div style="display:flex;align-items:center;gap:6px;">
         <div style="width:12px;height:12px;border:2px solid #d1d5db;border-top-color:#6366f1;border-radius:50%;animation:adspace-blink 1s linear infinite;"></div>
@@ -218,7 +249,7 @@ function createPopupContent(bb: Billboard) {
         <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
           <span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;">${bb.size}</span>
           <span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;">${bb.facing} Facing</span>
-          <span style="background:${tc.bg}15;color:${tc.bg};padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;">~${impStr}/day${isOSM ? ' ✓' : ''}</span>
+          <span style="background:${tc.bg}15;color:${tc.bg};padding:2px 8px;border-radius:6px;font-size:10px;font-weight:600;">~${impStr}/day${isOSM ? " ✓" : ""}</span>
         </div>
         ${trafficBar}
         <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid #f1f5f9;">
@@ -276,6 +307,14 @@ export default function MapComponent({
     return () => container.removeEventListener("click", handler);
   }, [onBookNow]);
 
+  /* ── Prevent map interactions from bubbling to page scroll ───────── */
+  useEffect(() => {
+    const container = mapContainer.current;
+    if (!container) return;
+    L.DomEvent.disableScrollPropagation(container);
+    L.DomEvent.disableClickPropagation(container);
+  }, []);
+
   /* ── Detect theme changes via MutationObserver ───────── */
   useEffect(() => {
     setDark(isDarkMode());
@@ -293,7 +332,10 @@ export default function MapComponent({
     if (!map) return;
     if (tileLayerRef.current) map.removeLayer(tileLayerRef.current);
     const t = dark ? TILES.dark : TILES.light;
-    tileLayerRef.current = L.tileLayer(t.url, { subdomains: t.subdomains, maxZoom: 19 }).addTo(map);
+    tileLayerRef.current = L.tileLayer(t.url, {
+      subdomains: t.subdomains,
+      maxZoom: 19,
+    }).addTo(map);
   }, [dark]);
 
   /* ── Initialize Leaflet ──────────────────────────────── */
@@ -314,7 +356,10 @@ export default function MapComponent({
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
     const t = isDarkMode() ? TILES.dark : TILES.light;
-    tileLayerRef.current = L.tileLayer(t.url, { subdomains: t.subdomains, maxZoom: 19 }).addTo(map);
+    tileLayerRef.current = L.tileLayer(t.url, {
+      subdomains: t.subdomains,
+      maxZoom: 19,
+    }).addTo(map);
 
     map.on("moveend", () => {
       const c = map.getCenter();
@@ -407,8 +452,8 @@ export default function MapComponent({
       // Open popup on click (not hover) so users can interact with Book Now
       marker.on("click", (e: L.LeafletMouseEvent) => {
         if (e.originalEvent) {
-          e.originalEvent.preventDefault();
-          e.originalEvent.stopPropagation();
+          L.DomEvent.preventDefault(e.originalEvent);
+          L.DomEvent.stopPropagation(e.originalEvent);
         }
         marker.openPopup();
       });
@@ -457,56 +502,12 @@ export default function MapComponent({
     });
   }, [showReach]);
 
-  // Prevent map interactions from scrolling the outer page
-  useEffect(() => {
-    const container = mapContainer.current;
-    if (!container) return;
-
-    // When user interacts with the map, lock page scroll position
-    let isInteracting = false;
-    let savedScrollY = 0;
-
-    const lockScroll = () => {
-      if (!isInteracting) {
-        isInteracting = true;
-        savedScrollY = window.scrollY;
-      }
-    };
-    const unlockScroll = () => { isInteracting = false; };
-    const preventScroll = () => {
-      if (isInteracting && Math.abs(window.scrollY - savedScrollY) > 5) {
-        window.scrollTo({ top: savedScrollY, behavior: "instant" as ScrollBehavior });
-      }
-    };
-
-    container.addEventListener("pointerdown", lockScroll);
-    container.addEventListener("click", lockScroll);
-    document.addEventListener("pointerup", unlockScroll);
-    window.addEventListener("scroll", preventScroll);
-
-    return () => {
-      container.removeEventListener("pointerdown", lockScroll);
-      container.removeEventListener("click", lockScroll);
-      document.removeEventListener("pointerup", unlockScroll);
-      window.removeEventListener("scroll", preventScroll);
-    };
-  }, []);
 
   // Unique types present
   const presentTypes = [...new Set(billboards.map((b) => b.type))];
 
   return (
-    <div
-      className="absolute inset-0 w-full h-full min-h-[600px]"
-      style={{ overflow: "hidden" }}
-      onClickCapture={(e) => {
-        // Prevent map clicks from scrolling the outer page
-        const target = e.target as HTMLElement;
-        if (target.closest(".leaflet-container")) {
-          e.preventDefault();
-        }
-      }}
-    >
+    <div className="absolute inset-0 w-full h-full" style={{ overflow: "hidden" }}>
       {/* Loading state */}
       {!ready && (
         <div
@@ -532,14 +533,17 @@ export default function MapComponent({
               }}
             />
           </div>
-          <p className="text-sm font-medium tracking-wide" style={{ color: dark ? "#a0aec0" : "#6b7280" }}>
+          <p
+            className="text-sm font-medium tracking-wide"
+            style={{ color: dark ? "#a0aec0" : "#6b7280" }}
+          >
             Loading map…
           </p>
         </div>
       )}
 
       {/* Map */}
-      <div ref={mapContainer} className="w-full h-full z-[1] min-h-[600px]" />
+      <div ref={mapContainer} className="w-full h-full z-[1]" />
 
       {/* ── Map Legend (bottom-left floating panel) ─────────── */}
       {ready && showLegend && (
@@ -556,8 +560,18 @@ export default function MapComponent({
               className="w-5 h-5 rounded-full bg-surface-variant flex items-center justify-center hover:bg-surface-container-highest transition-colors"
               aria-label="Close legend"
             >
-              <svg className="w-3 h-3 text-on-surface-variant" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-3 h-3 text-on-surface-variant"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -568,9 +582,14 @@ export default function MapComponent({
                 <div key={type} className="flex items-center gap-2.5">
                   <div
                     className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{ background: tc.bg, boxShadow: `0 0 6px ${tc.glow}` }}
+                    style={{
+                      background: tc.bg,
+                      boxShadow: `0 0 6px ${tc.glow}`,
+                    }}
                   />
-                  <span className="text-xs font-medium text-on-surface">{type}</span>
+                  <span className="text-xs font-medium text-on-surface">
+                    {type}
+                  </span>
                 </div>
               );
             })}
@@ -607,8 +626,18 @@ export default function MapComponent({
           className="absolute bottom-20 left-4 z-[1000] glass-panel rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105"
           aria-label="Show legend"
         >
-          <svg className="w-4 h-4 text-on-surface" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          <svg
+            className="w-4 h-4 text-on-surface"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+            />
           </svg>
         </button>
       )}
@@ -616,15 +645,29 @@ export default function MapComponent({
       {/* ── Inject keyframe animations ─────────────────────── */}
       <style jsx global>{`
         @keyframes adspace-ping {
-          0% { transform: translate(-50%, -55%) scale(1); opacity: 0.6; }
-          100% { transform: translate(-50%, -55%) scale(1.6); opacity: 0; }
+          0% {
+            transform: translate(-50%, -55%) scale(1);
+            opacity: 0.6;
+          }
+          100% {
+            transform: translate(-50%, -55%) scale(1.6);
+            opacity: 0;
+          }
         }
         @keyframes adspace-blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.3;
+          }
         }
         .adspace-reach-circle {
-          transition: fill-opacity 0.3s, stroke-opacity 0.3s, stroke-width 0.3s;
+          transition:
+            fill-opacity 0.3s,
+            stroke-opacity 0.3s,
+            stroke-width 0.3s;
         }
       `}</style>
     </div>
