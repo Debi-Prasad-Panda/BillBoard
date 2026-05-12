@@ -266,7 +266,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -323,6 +322,18 @@
   font-family: var(--font-sans), system-ui, sans-serif;
   isolation: isolate;
   background: #f0f4f8;
+  /* Prevent marker/popup clicks from triggering page scroll */
+  overscroll-behavior: contain;
+}
+
+/* Prevent Leaflet's internal anchors from hijacking page scroll */
+.leaflet-container a {
+  scroll-behavior: auto !important;
+}
+
+.leaflet-marker-icon a,
+.leaflet-popup a {
+  scroll-behavior: auto !important;
 }
 
 /* Zoom control styling */
@@ -426,4 +437,26 @@
 /* Map loading spinner keyframe */
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ─── Reach Zone Circles ──────────────────────────────── */
+.adspace-reach-circle {
+  transition: fill-opacity 0.3s ease, stroke-opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+/* ─── Dark mode popup text overrides ──────────────────── */
+.dark .adspace-leaflet-popup p,
+.dark .adspace-leaflet-popup span,
+.dark .adspace-leaflet-popup div {
+  color: inherit;
+}
+
+.dark .adspace-leaflet-popup .leaflet-popup-content-wrapper {
+  color: #e5e7eb;
+}
+
+/* Smooth pulse for map markers */
+@keyframes adspace-marker-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.2)); }
+  50% { filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.5)); }
 }

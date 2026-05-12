@@ -14,6 +14,12 @@ export type Billboard = {
   available: string;
   lat: number;
   lng: number;
+  // Populated by /api/traffic-estimate
+  trafficScore?: number;         // 0–100
+  estimatedImpressions?: number; // OSM-based calculation
+  reachRadius?: number;          // meters
+  nearestRoad?: string;          // road classification
+  poiCount?: number;             // nearby POIs within 500m
 };
 
 // Mock data moved to server for SSR and SEO Schema Generation
@@ -121,6 +127,84 @@ export const BILLBOARDS: Billboard[] = [
     available: "Available Tomorrow",
     lat: 19.0176,
     lng: 72.8429
+  },
+  {
+    id: "bb-9",
+    title: "Malad Link Road Digital",
+    size: "12x24",
+    type: "Digital",
+    facing: "South",
+    impressions: 72000,
+    price: 1650,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuClrIlKUzUApEcejLdaZWiZdlTq8tJEcf-mzwJ1Exa6szUvbvAhQi-T3wBTxjomngmizDz5KuHqZFI0oEeCAw3JwWvTO99JFr_4Bq0WGeUKVq44h6GRs5WiTEJ5fzgFBDJJurCj1uwd-oWS4wvlNkZyetb6ch1Cjp_HmKcHilaKqetC_9JTr_K5zWafGafyFOThtCIzDHFcyI_q6Wcbu2Qlp-qzXLIwXooCuXnvBI8rY90W4s9okCgbnDInVYlWBcAlDOMjIBEz_g",
+    available: "Available Now",
+    lat: 19.1870,
+    lng: 72.8486
+  },
+  {
+    id: "bb-10",
+    title: "Worli Sea Face LED Wall",
+    size: "30x50",
+    type: "LED",
+    facing: "West",
+    impressions: 180000,
+    price: 6200,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBspRisLqJkR76Hpxuq-Cd0vDuwzwbT3qpvH8jtriRAxdDdhkYnZ68sKsHjG9yW1b_pHUI6aNbnLk6bE40xrEHTQXpG1jgwGrh43DFBcaBZCgZG3g7d4e7z7snoaQb963Ep4c_TnjLfVbVb_vtn6f4obGlUnSopwCcxEHFGLpuPhD2MgplnJMzkCAxO7rh5ltyW2akeS9VDEQZgDitQ-29GVTBbdPOyvLHODoAnecferNOKyCSnb8_Nz5YGbHIS9JmemnNnxsLX2g",
+    available: "Available Now",
+    lat: 19.0090,
+    lng: 72.8157
+  },
+  {
+    id: "bb-11",
+    title: "Thane Station Unipole",
+    size: "20x30",
+    type: "Unipole",
+    facing: "North",
+    impressions: 48000,
+    price: 780,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuClrIlKUzUApEcejLdaZWiZdlTq8tJEcf-mzwJ1Exa6szUvbvAhQi-T3wBTxjomngmizDz5KuHqZFI0oEeCAw3JwWvTO99JFr_4Bq0WGeUKVq44h6GRs5WiTEJ5fzgFBDJJurCj1uwd-oWS4wvlNkZyetb6ch1Cjp_HmKcHilaKqetC_9JTr_K5zWafGafyFOThtCIzDHFcyI_q6Wcbu2Qlp-qzXLIwXooCuXnvBI8rY90W4s9okCgbnDInVYlWBcAlDOMjIBEz_g",
+    available: "Available Next Week",
+    lat: 19.1854,
+    lng: 72.9756
+  },
+  {
+    id: "bb-12",
+    title: "Colaba Causeway Premium Static",
+    size: "10x20",
+    type: "Static",
+    facing: "East",
+    impressions: 38000,
+    price: 1100,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBspRisLqJkR76Hpxuq-Cd0vDuwzwbT3qpvH8jtriRAxdDdhkYnZ68sKsHjG9yW1b_pHUI6aNbnLk6bE40xrEHTQXpG1jgwGrh43DFBcaBZCgZG3g7d4e7z7snoaQb963Ep4c_TnjLfVbVb_vtn6f4obGlUnSopwCcxEHFGLpuPhD2MgplnJMzkCAxO7rh5ltyW2akeS9VDEQZgDitQ-29GVTBbdPOyvLHODoAnecferNOKyCSnb8_Nz5YGbHIS9JmemnNnxsLX2g",
+    available: "Available Now",
+    lat: 18.9067,
+    lng: 72.8260
+  },
+  {
+    id: "bb-13",
+    title: "Goregaon Filmcity Digital Billboard",
+    size: "15x30",
+    type: "Digital",
+    facing: "North",
+    impressions: 65000,
+    price: 1450,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuClrIlKUzUApEcejLdaZWiZdlTq8tJEcf-mzwJ1Exa6szUvbvAhQi-T3wBTxjomngmizDz5KuHqZFI0oEeCAw3JwWvTO99JFr_4Bq0WGeUKVq44h6GRs5WiTEJ5fzgFBDJJurCj1uwd-oWS4wvlNkZyetb6ch1Cjp_HmKcHilaKqetC_9JTr_K5zWafGafyFOThtCIzDHFcyI_q6Wcbu2Qlp-qzXLIwXooCuXnvBI8rY90W4s9okCgbnDInVYlWBcAlDOMjIBEz_g",
+    available: "Available Now",
+    lat: 19.1637,
+    lng: 72.8526
+  },
+  {
+    id: "bb-14",
+    title: "BKC Connector LED Spectacular",
+    size: "40x60",
+    type: "LED",
+    facing: "South",
+    impressions: 250000,
+    price: 9500,
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBspRisLqJkR76Hpxuq-Cd0vDuwzwbT3qpvH8jtriRAxdDdhkYnZ68sKsHjG9yW1b_pHUI6aNbnLk6bE40xrEHTQXpG1jgwGrh43DFBcaBZCgZG3g7d4e7z7snoaQb963Ep4c_TnjLfVbVb_vtn6f4obGlUnSopwCcxEHFGLpuPhD2MgplnJMzkCAxO7rh5ltyW2akeS9VDEQZgDitQ-29GVTBbdPOyvLHODoAnecferNOKyCSnb8_Nz5YGbHIS9JmemnNnxsLX2g",
+    available: "Available Now",
+    lat: 19.0653,
+    lng: 72.8615
   }
 ];
 

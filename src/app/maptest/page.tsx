@@ -11,7 +11,9 @@ export default function MapTest() {
     
     (async () => {
       try {
+        // @ts-ignore - maplibre-gl may not be installed
         const maplibregl = (await import("maplibre-gl")).default;
+        // @ts-ignore
         await import("maplibre-gl/dist/maplibre-gl.css");
         
         console.log("[MapTest] maplibregl version:", maplibregl.version);
