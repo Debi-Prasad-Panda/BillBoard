@@ -170,7 +170,7 @@ function createPopupContent(bb: Billboard) {
   const impStr = impSource >= 1000 ? `${(impSource / 1000).toFixed(0)}k` : String(impSource);
   const isOSM = !!bb.estimatedImpressions;
 
-  // Traffic score bar (only when OSM data is available)
+  // Traffic score bar (shows loading state until OSM data arrives)
   const trafficBar = bb.trafficScore != null ? `
     <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
@@ -185,7 +185,14 @@ function createPopupContent(bb: Billboard) {
         ${bb.poiCount ? `<span style="background:#fdf2f8;color:#be185d;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;">🏪 ${bb.poiCount} POIs nearby</span>` : ''}
       </div>
     </div>
-  ` : '';
+  ` : `
+    <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <div style="width:12px;height:12px;border:2px solid #d1d5db;border-top-color:#6366f1;border-radius:50%;animation:adspace-blink 1s linear infinite;"></div>
+        <span style="font-size:10px;color:#9ca3af;font-weight:500;">Loading traffic data...</span>
+      </div>
+    </div>
+  `;
 
   return `
     <div style="
@@ -379,7 +386,6 @@ export default function MapComponent({
       marker.on("mouseover", () => {
         setHoveredPin(bb.id);
         marker.setIcon(createPricePin(bb, true));
-        marker.openPopup();
         // Brighten the reach circle on hover
         const c = circlesRef.current.get(bb.id);
         if (c) {
@@ -388,26 +394,33 @@ export default function MapComponent({
       });
 
       marker.on("mouseout", () => {
+        // Don't reset if this marker's popup is currently open
+        if (marker.isPopupOpen()) return;
         setHoveredPin(null);
         marker.setIcon(createPricePin(bb, false));
-        marker.closePopup();
         const c = circlesRef.current.get(bb.id);
         if (c) {
           c.setStyle({ fillOpacity: 0.08, opacity: 0.35, weight: 1.5 });
         }
       });
 
+      // Open popup on click (not hover) so users can interact with Book Now
       marker.on("click", (e: L.LeafletMouseEvent) => {
-        // Prevent the click from bubbling to the page and triggering scroll
         if (e.originalEvent) {
           e.originalEvent.preventDefault();
           e.originalEvent.stopPropagation();
         }
-        map.flyTo([bb.lat, bb.lng], 14, {
-          animate: true,
-          duration: 1.2,
-          easeLinearity: 0.2,
-        });
+        marker.openPopup();
+      });
+
+      // Reset pin style when popup is closed
+      marker.on("popupclose", () => {
+        setHoveredPin(null);
+        marker.setIcon(createPricePin(bb, false));
+        const c = circlesRef.current.get(bb.id);
+        if (c) {
+          c.setStyle({ fillOpacity: 0.08, opacity: 0.35, weight: 1.5 });
+        }
       });
 
       markersRef.current.set(bb.id, marker);
@@ -415,20 +428,20 @@ export default function MapComponent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, billboards, showReach]);
 
-  /* ── Sync hover from listings panel ─────────────────── */
+  /* ── Sync hover from listings panel (highlight only, no popup) */
   useEffect(() => {
     if (!ready) return;
     markersRef.current.forEach((marker, id) => {
       const bb = billboards.find((b) => b.id === id);
       if (!bb) return;
+      // Skip if popup is currently open — don't override user's click
+      if (marker.isPopupOpen()) return;
       if (id === hoveredPin) {
         marker.setIcon(createPricePin(bb, true));
-        marker.openPopup();
         const c = circlesRef.current.get(bb.id);
         if (c) c.setStyle({ fillOpacity: 0.18, opacity: 0.6, weight: 2 });
       } else {
         marker.setIcon(createPricePin(bb, false));
-        marker.closePopup();
         const c = circlesRef.current.get(bb.id);
         if (c) c.setStyle({ fillOpacity: 0.08, opacity: 0.35, weight: 1.5 });
       }
@@ -444,12 +457,48 @@ export default function MapComponent({
     });
   }, [showReach]);
 
+  // Prevent map interactions from scrolling the outer page
+  useEffect(() => {
+    const container = mapContainer.current;
+    if (!container) return;
+
+    // When user interacts with the map, lock page scroll position
+    let isInteracting = false;
+    let savedScrollY = 0;
+
+    const lockScroll = () => {
+      if (!isInteracting) {
+        isInteracting = true;
+        savedScrollY = window.scrollY;
+      }
+    };
+    const unlockScroll = () => { isInteracting = false; };
+    const preventScroll = () => {
+      if (isInteracting && Math.abs(window.scrollY - savedScrollY) > 5) {
+        window.scrollTo({ top: savedScrollY, behavior: "instant" as ScrollBehavior });
+      }
+    };
+
+    container.addEventListener("pointerdown", lockScroll);
+    container.addEventListener("click", lockScroll);
+    document.addEventListener("pointerup", unlockScroll);
+    window.addEventListener("scroll", preventScroll);
+
+    return () => {
+      container.removeEventListener("pointerdown", lockScroll);
+      container.removeEventListener("click", lockScroll);
+      document.removeEventListener("pointerup", unlockScroll);
+      window.removeEventListener("scroll", preventScroll);
+    };
+  }, []);
+
   // Unique types present
   const presentTypes = [...new Set(billboards.map((b) => b.type))];
 
   return (
     <div
       className="absolute inset-0 w-full h-full min-h-[600px]"
+      style={{ overflow: "hidden" }}
       onClickCapture={(e) => {
         // Prevent map clicks from scrolling the outer page
         const target = e.target as HTMLElement;

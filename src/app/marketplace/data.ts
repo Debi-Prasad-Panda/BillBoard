@@ -27,6 +27,12 @@ export type Billboard = {
   demographics: { twoWheeler: number; car: number; bus: number; pedestrian: number; incomeZone: string; };
   weatherScore: number; proofImages: string[];
   bookedDates: string[]; // "YYYY-MM-DD" strings
+  // OSM traffic estimation (populated at runtime via /api/traffic-estimate)
+  trafficScore?: number;
+  estimatedImpressions?: number;
+  reachRadius?: number;
+  nearestRoad?: string;
+  poiCount?: number;
 };
 
 const IMG_A = "https://lh3.googleusercontent.com/aida-public/AB6AXuClrIlKUzUApEcejLdaZWiZdlTq8tJEcf-mzwJ1Exa6szUvbvAhQi-T3wBTxjomngmizDz5KuHqZFI0oEeCAw3JwWvTO99JFr_4Bq0WGeUKVq44h6GRs5WiTEJ5fzgFBDJJurCj1uwd-oWS4wvlNkZyetb6ch1Cjp_HmKcHilaKqetC_9JTr_K5zWafGafyFOThtCIzDHFcyI_q6Wcbu2Qlp-qzXLIwXooCuXnvBI8rY90W4s9okCgbnDInVYlWBcAlDOMjIBEz_g";

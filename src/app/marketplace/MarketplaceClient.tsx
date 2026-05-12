@@ -367,37 +367,103 @@ export default function MarketplaceClient({ initialBillboards }: { initialBillbo
   const [viewState, setViewState] = useState({ longitude: 72.87, latitude: 19.06, zoom: 11 });
   const [billboards, setBillboards] = useState(initialBillboards);
 
-  // Fetch real traffic data from OSM on mount
+  // Fetch real billboard locations from OpenStreetMap on mount
+  useEffect(() => {
+    const fetchReal = async () => {
+      try {
+        const res = await fetch("/api/real-billboards");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.billboards?.length) return;
+
+        // Convert OSM billboards to full Billboard type
+        const defaultVendor = { name: "OSM Verified", rating: 0, totalListings: 0, verified: false, since: "2024", responseTime: "N/A" };
+        const defaultScores = { visibility: 50, readability: 50, dwellTime: 50, illumination: 50, angle: 50 };
+        const defaultTraffic = { hourly: Array(24).fill(0), weekdayAvg: 0, weekendAvg: 0, peakHour: "N/A" };
+        const defaultCampaigns = { totalRuns: 0, avgDuration: 0, renewalRate: 0, topBrands: [], avgCTR: 0 };
+        const defaultMarket = { rank: 0, totalInArea: 0, percentile: 0, priceVsAvg: 0 };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const realBillboards: Billboard[] = data.billboards.map((rb: any) => ({
+          id: rb.id,
+          title: rb.title,
+          size: rb.size || "20x10",
+          type: rb.type || "Static",
+          facing: rb.facing || "North",
+          impressions: rb.impressions || 0,
+          price: rb.price || 500,
+          image: rb.image,
+          available: rb.available || "Available Now",
+          lat: rb.lat,
+          lng: rb.lng,
+          availability: rb.availability || "available",
+          location: `${rb.area || "Mumbai"}`,
+          vendor: defaultVendor,
+          scores: defaultScores,
+          traffic: defaultTraffic,
+          campaigns: defaultCampaigns,
+          market: defaultMarket,
+          demographics: { twoWheeler: 30, car: 35, bus: 20, pedestrian: 15, incomeZone: "Mid" },
+          weatherScore: 70,
+          proofImages: [rb.image],
+          bookedDates: [],
+        }));
+
+        setBillboards(prev => {
+          // Merge: keep existing, add new real ones (avoid duplicates)
+          const existingIds = new Set(prev.map(b => b.id));
+          const newOnes = realBillboards.filter(rb => !existingIds.has(rb.id));
+          return [...prev, ...newOnes];
+        });
+      } catch (err) {
+        console.warn("Real billboard fetch failed (non-critical):", err);
+      }
+    };
+    fetchReal();
+  }, []);
+
+  // Fetch real traffic data from OSM for all billboards (in batches of 20)
   useEffect(() => {
     const fetchTraffic = async () => {
       try {
-        const locations = initialBillboards.map(b => ({ id: b.id, lat: b.lat, lng: b.lng }));
-        const res = await fetch("/api/traffic-estimate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ locations }),
-        });
-        if (!res.ok) return;
-        const data = await res.json();
+        // Only fetch for billboards missing traffic data
+        const needsTraffic = billboards.filter(b => b.trafficScore === undefined);
+        if (needsTraffic.length === 0) return;
 
-        setBillboards(prev => prev.map(bb => {
-          const est = data[bb.id];
-          if (!est) return bb;
-          return {
-            ...bb,
-            trafficScore: est.trafficScore,
-            estimatedImpressions: est.estimatedDailyImpressions,
-            reachRadius: est.reachRadiusMeters,
-            nearestRoad: est.nearestRoad,
-            poiCount: est.breakdown?.nearbyPOIs?.reduce((s: number, p: { count: number }) => s + p.count, 0) || 0,
-          };
-        }));
+        const locations = needsTraffic.map(b => ({ id: b.id, lat: b.lat, lng: b.lng }));
+
+        // Process in batches of 20 (API limit)
+        for (let i = 0; i < locations.length; i += 20) {
+          const batch = locations.slice(i, i + 20);
+          const res = await fetch("/api/traffic-estimate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ locations: batch }),
+          });
+          if (!res.ok) continue;
+          const data = await res.json();
+
+          setBillboards(prev => prev.map(bb => {
+            const est = data[bb.id];
+            if (!est) return bb;
+            return {
+              ...bb,
+              trafficScore: est.trafficScore,
+              estimatedImpressions: est.estimatedDailyImpressions,
+              reachRadius: est.reachRadiusMeters,
+              nearestRoad: est.nearestRoad,
+              poiCount: est.breakdown?.nearbyPOIs?.reduce((s: number, p: { count: number }) => s + p.count, 0) || 0,
+            };
+          }));
+        }
       } catch (err) {
         console.warn("Traffic estimate fetch failed (non-critical):", err);
       }
     };
-    fetchTraffic();
-  }, [initialBillboards]);
+    // Wait a bit for real billboards to potentially load first
+    const timer = setTimeout(fetchTraffic, 2000);
+    return () => clearTimeout(timer);
+  }, [billboards.length]); // Re-run when billboard count changes (real ones added)
 
   const minPriceInData = useMemo(() => Math.min(...initialBillboards.map(b => b.price)), [initialBillboards]);
   const maxPriceInData = useMemo(() => Math.max(...initialBillboards.map(b => b.price)), [initialBillboards]);
